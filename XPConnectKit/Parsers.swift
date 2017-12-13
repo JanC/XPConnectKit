@@ -29,7 +29,7 @@ public struct FloatArrayPraser: Parser {
     }
     
     public func parse(values: [Float]) throws -> [Float] {
-        return values.map { $0 / 100 }
+        return values.map { $0 }
     }
 }
 
@@ -44,7 +44,7 @@ public struct FloatPraser: Parser {
     }
     
     public func parse(values: [Float]) throws -> Float {
-        return values.first! / 100
+        return values.first!
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A12A92F1FE181D1002F07F5 /* XPCPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A12A92E1FE181D1002F07F5 /* XPCPosition.swift */; };
 		8A60DB8E1FD5FD6D003076B6 /* XPPlaneConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DB8D1FD5FD6D003076B6 /* XPPlaneConnect.swift */; };
 		8A60DBB51FD6002C003076B6 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A60DBB21FD6002C003076B6 /* CMakeLists.txt */; };
 		8A60DBB61FD6002C003076B6 /* xplaneConnect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DBB31FD6002C003076B6 /* xplaneConnect.c */; };
@@ -48,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8A12A92E1FE181D1002F07F5 /* XPCPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPCPosition.swift; sourceTree = "<group>"; };
 		8A60DB8D1FD5FD6D003076B6 /* XPPlaneConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPPlaneConnect.swift; sourceTree = "<group>"; };
 		8A60DBB11FD6002C003076B6 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8A60DBB21FD6002C003076B6 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -95,6 +97,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A12A92D1FE181AD002F07F5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8A12A92E1FE181D1002F07F5 /* XPCPosition.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		8A60DBB01FD6002C003076B6 /* xplaneconnect */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +169,7 @@
 		8AAB2E691FD5FA1E009EBA2D /* XPConnectKit */ = {
 			isa = PBXGroup;
 			children = (
+				8A12A92D1FE181AD002F07F5 /* Models */,
 				8A60DBB01FD6002C003076B6 /* xplaneconnect */,
 				8AAB2E6A1FD5FA1E009EBA2D /* XPConnectKit.h */,
 				8AAB2E6B1FD5FA1E009EBA2D /* Info.plist */,
@@ -332,6 +343,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A12A92F1FE181D1002F07F5 /* XPCPosition.swift in Sources */,
 				8AC09FC21FD697460064F93B /* Parsers.swift in Sources */,
 				8A60DB8E1FD5FD6D003076B6 /* XPPlaneConnect.swift in Sources */,
 				8A60DBB61FD6002C003076B6 /* xplaneConnect.c in Sources */,

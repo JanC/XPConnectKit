@@ -11,7 +11,7 @@ import XPConnectKit
 
 class ViewController: UIViewController {
 
-    let connect = XPPlaneConnect(host: "192.168.1.197")
+    let connect = XPPlaneConnect(host: "192.168.0.5")
 //    let connect = XPCPlaneConnect(host: "192.168.1.197")!
     
     override func viewDidLoad() {
@@ -25,10 +25,14 @@ class ViewController: UIViewController {
     }
     
     @IBAction func sendAction() {
+        
 //        connect.get(dref: "sim/cockpit/radios/nav1_freq_hz")
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
-            self.requestDREF()
-        }
+//        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+            if let position = try? self.connect.getPosition() {
+                print("position: \(position)")
+            }
+//            self.requestDREF()
+//        }
 
     }
     
