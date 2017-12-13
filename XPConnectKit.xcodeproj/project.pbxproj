@@ -100,9 +100,35 @@
 		8A12A92D1FE181AD002F07F5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8AC09FC11FD697460064F93B /* Parsers.swift */,
 				8A12A92E1FE181D1002F07F5 /* XPCPosition.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		8A12A9311FE1910E002F07F5 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				8A60DB8D1FD5FD6D003076B6 /* XPPlaneConnect.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		8A12A9321FE1911A002F07F5 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				8A12A9331FE1912E002F07F5 /* Controllers */,
+				8A12A9311FE1910E002F07F5 /* Network */,
+				8A12A92D1FE181AD002F07F5 /* Models */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		8A12A9331FE1912E002F07F5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		8A60DBB01FD6002C003076B6 /* xplaneconnect */ = {
@@ -169,12 +195,10 @@
 		8AAB2E691FD5FA1E009EBA2D /* XPConnectKit */ = {
 			isa = PBXGroup;
 			children = (
-				8A12A92D1FE181AD002F07F5 /* Models */,
+				8A12A9321FE1911A002F07F5 /* Classes */,
 				8A60DBB01FD6002C003076B6 /* xplaneconnect */,
 				8AAB2E6A1FD5FA1E009EBA2D /* XPConnectKit.h */,
 				8AAB2E6B1FD5FA1E009EBA2D /* Info.plist */,
-				8A60DB8D1FD5FD6D003076B6 /* XPPlaneConnect.swift */,
-				8AC09FC11FD697460064F93B /* Parsers.swift */,
 			);
 			path = XPConnectKit;
 			sourceTree = "<group>";
