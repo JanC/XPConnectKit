@@ -16,7 +16,7 @@ public enum XPError: Error {
 }
 
 
-public class XPPlaneConnect {
+public class XPCClient {
     
     let socket: XPCSocket
     
