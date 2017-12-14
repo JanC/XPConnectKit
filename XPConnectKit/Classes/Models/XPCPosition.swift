@@ -24,10 +24,10 @@ public struct XPCPosition {
     }
     
     let aircraftId: Int
-    let location: CLLocation
-    let roll: Float
-    let pitch: Float
-    let heading: Float
+    public let location: CLLocation
+    public let roll: Float
+    public let pitch: Float
+    public let heading: Double
     
     init?(aircraftId: Int, values: [Float]) {
         if(values.count != Indexes.count) {
@@ -39,7 +39,8 @@ public struct XPCPosition {
         location = CLLocation(coordinate: coordinates, altitude: Double(values[Indexes.elevation.rawValue]), horizontalAccuracy: 1, verticalAccuracy: 1, timestamp: Date())
         roll = values[Indexes.roll.rawValue]
         pitch = values[Indexes.pitch.rawValue]
-        heading = values[Indexes.heading.rawValue]
+        heading = Double(values[Indexes.heading.rawValue])
     
     }
 }
+
