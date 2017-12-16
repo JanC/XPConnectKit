@@ -18,10 +18,13 @@ public class XPLConnector: NSObject {
     public var positionDelegate: XPLConnectorDelegate?
     // MARK: - Private
     let client: XPCClient
+    
     var positionTimer: Timer?
+    var dataRefQueue = OperationQueue()
     
     public init(host: String) {
         client = XPCClient(host: host)
+        dataRefQueue.maxConcurrentOperationCount = 1
     }
     
 
@@ -29,8 +32,30 @@ public class XPLConnector: NSObject {
         startRequestingPosition()
     }
     
+    public func startRequestingDataRef() {
+        //client.get(dref: <#T##String#>, parser: <#T##Parser#>)
+    }
+    
+    public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
+        var result: P.T?
+        var clientError: Error?
+        dataRefQueue.addOperations([BlockOperation {
+            do {
+                result = try self.client.get(dref: dref, parser: parser)
+            } catch {
+                clientError = error
+            }
+            
+        }], waitUntilFinished: true)
+        
+        if let clientError = clientError {
+            throw clientError
+        }
+        return result!
+    }
+    
     func startRequestingPosition() {
-        if (positionTimer != nil){
+        if (positionTimer != nil) {
             return
         }
         
