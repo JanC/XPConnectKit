@@ -11,9 +11,12 @@ import XPConnectKit
 
 class ViewController: UIViewController {
 
-    let client = XPCClient(host: "192.168.0.5")
-    let connector = XPLConnector(host: "192.168.0.5")
-//    let connect = XPCPlaneConnect(host: "192.168.1.197")!
+//    static let host = "192.168.1.197"
+    static let host = "192.168.0.5"
+    
+    let client = XPCClient(host: ViewController.host)
+    let connector = XPLConnector(host: ViewController.host)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,15 +28,15 @@ class ViewController: UIViewController {
     }
     
     @IBAction func sendAction() {
-        connector.start()
+//        connector.start()
         
 //        connect.get(dref: "sim/cockpit/radios/nav1_freq_hz")
-//        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+        Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { (_) in
 //            if let position = try? self.client.getPosition() {
 //                print("position: \(position)")
 //            }
-//            self.requestDREF()
-//        }
+            self.requestDREFConnector()
+        }
 
     }
     
@@ -46,15 +49,31 @@ class ViewController: UIViewController {
             print("nav2: \(nav2)")
         }
         
-        if let tailNum = try? client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
-            print("tail num: \(tailNum)")
+//        if let tailNum = try? client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
+//            print("tail num: \(tailNum)")
+//        }
+        
+//        print("nav1: \(nav1 ?? "-" ) tail num: \(tailNum)")
+    }
+    
+    func requestDREFConnector() {
+        if let nav1 = try? connector.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
+            print("nav1: \(nav1)")
         }
+        
+        if let nav2 = try? connector.get(dref: "sim/cockpit/radios/nav2_freq_hz", parser: FloatPraser()) {
+            print("nav2: \(nav2)")
+        }
+        
+//        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
+//            print("tail num: \(tailNum)")
+//        }
     }
 }
 
-extension ViewController: SimPositionDelegate {
-    func connector(_ connector: SimConnector, didReceive location: SimLocation) {
-        print("\(#function): \(location)")
+extension ViewController: XPLConnectorDelegate {
+    func connector(_ connector: XPLConnector, didReceive position: XPCPosition) {
+        print("\(#function): \(position)")
     }
 }
 
