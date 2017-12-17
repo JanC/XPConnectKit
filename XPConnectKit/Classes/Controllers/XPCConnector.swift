@@ -15,11 +15,14 @@ public protocol XPLConnectorDelegate {
 
 public class XPLConnector: NSObject {
     
+    typealias DataRefCallback = (String) -> Void
+    
     public var positionDelegate: XPLConnectorDelegate?
     // MARK: - Private
     let client: XPCClient
     
     var positionTimer: Timer?
+    var drefTimers = [String: Timer]()
     var dataRefQueue = OperationQueue()
     
     public init(host: String) {
@@ -32,8 +35,27 @@ public class XPLConnector: NSObject {
         startRequestingPosition()
     }
     
-    public func startRequestingDataRef() {
-        //client.get(dref: <#T##String#>, parser: <#T##Parser#>)
+    
+    public func startUpdating<P: Parser>(dref: String, parser: P, interval: TimeInterval = 0.5 , callback: @escaping (P.T) -> Void) -> Bool {
+        
+        if drefTimers[dref] != nil {
+            // already updating
+            return false
+        }
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+            let result = try! self.get(dref: dref, parser: parser)
+            callback(result)
+        }
+        drefTimers[dref] = timer
+        return true
+    }
+    
+    public func stopUpdating(dref: String) {
+        if let timer = drefTimers[dref] {
+            timer.invalidate()
+            drefTimers[dref] = nil
+        }
     }
     
     public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
