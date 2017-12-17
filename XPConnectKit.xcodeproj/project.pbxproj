@@ -21,7 +21,6 @@
 		8A60DBCE1FD60543003076B6 /* XPConnectKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAB2E681FD5FA1E009EBA2D /* XPConnectKit.framework */; };
 		8A60DBCF1FD60543003076B6 /* XPConnectKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAB2E681FD5FA1E009EBA2D /* XPConnectKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8A84717F1FE66B2A00A917EE /* UnitKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8471801FE66B2A00A917EE /* UnitKit.framework */; };
-		8AAB2E261FD5BD42009EBA2D /* XPConnectKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AAB2E251FD5BD42009EBA2D /* XPConnectKitTests.m */; };
 		8AAB2E6C1FD5FA1E009EBA2D /* XPConnectKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AAB2E6A1FD5FA1E009EBA2D /* XPConnectKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AC09FC21FD697460064F93B /* Parsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC09FC11FD697460064F93B /* Parsers.swift */; };
 /* End PBXBuildFile section */
@@ -67,8 +66,6 @@
 		8A60DBCA1FD60523003076B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A8471801FE66B2A00A917EE /* UnitKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UnitKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AAB2E201FD5BD42009EBA2D /* XPConnectKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XPConnectKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AAB2E251FD5BD42009EBA2D /* XPConnectKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPConnectKitTests.m; sourceTree = "<group>"; };
-		8AAB2E271FD5BD42009EBA2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8AAB2E681FD5FA1E009EBA2D /* XPConnectKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XPConnectKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AAB2E6A1FD5FA1E009EBA2D /* XPConnectKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPConnectKit.h; sourceTree = "<group>"; };
 		8AAB2E6B1FD5FA1E009EBA2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -165,7 +162,6 @@
 			isa = PBXGroup;
 			children = (
 				8AAB2E691FD5FA1E009EBA2D /* XPConnectKit */,
-				8AAB2E241FD5BD42009EBA2D /* XPConnectKitTests */,
 				8A60DBBD1FD60523003076B6 /* XPSample */,
 				8AAB2E181FD5BD42009EBA2D /* Products */,
 				8AAB2E581FD5E680009EBA2D /* Frameworks */,
@@ -180,15 +176,6 @@
 				8A60DBBC1FD60523003076B6 /* XPSample.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		8AAB2E241FD5BD42009EBA2D /* XPConnectKitTests */ = {
-			isa = PBXGroup;
-			children = (
-				8AAB2E251FD5BD42009EBA2D /* XPConnectKitTests.m */,
-				8AAB2E271FD5BD42009EBA2D /* Info.plist */,
-			);
-			path = XPConnectKitTests;
 			sourceTree = "<group>";
 		};
 		8AAB2E581FD5E680009EBA2D /* Frameworks */ = {
@@ -366,7 +353,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8AAB2E261FD5BD42009EBA2D /* XPConnectKitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

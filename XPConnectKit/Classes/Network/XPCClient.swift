@@ -54,19 +54,6 @@ public class XPCClient {
             return pointer.pointee
         }
         
-//        print("actual size \(actualSize)")
         let result = Array(UnsafeBufferPointer(start: values, count: Int(actualSize)))
-//        print("values: \(result)")
-        
         return try parser.parse(values: result)
-        
-//
-//        let chars = result.map() { CChar($0) }
-//        print("chars: \(chars)")
-//        let string: String = chars.withUnsafeBufferPointer { ptr in
-//            let s = String(cString: ptr.baseAddress!)
-//            return s
-//        }
-//        print("string: \(string)")
-    }
 }
