@@ -8,16 +8,14 @@
 
 import Foundation
 
-public protocol XPLConnectorDelegate {
-    
-    func connector(_ connector: XPLConnector, didReceive position: XPCPosition)
-}
+//public protocol XPLConnectorDelegate {
+//
+//    func connector(_ connector: XPLConnector, didReceive position: XPCPosition)
+//}
 
 public class XPLConnector: NSObject {
-    
-    typealias DataRefCallback = (String) -> Void
-    
-    public var positionDelegate: XPLConnectorDelegate?
+
+//    public var positionDelegate: XPLConnectorDelegate?
     // MARK: - Private
     let client: XPCClient
     
@@ -29,35 +27,13 @@ public class XPLConnector: NSObject {
         client = XPCClient(host: host)
         dataRefQueue.maxConcurrentOperationCount = 1
     }
-    
 
-    public func start() {
-        startRequestingPosition()
-    }
+    // MARK: - Data Refs
     
-    
-    public func startUpdating<P: Parser>(dref: String, parser: P, interval: TimeInterval = 0.5 , callback: @escaping (P.T) -> Void) -> Bool {
-        
-        if drefTimers[dref] != nil {
-            // already updating
-            return false
-        }
-        
-        let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
-            let result = try! self.get(dref: dref, parser: parser)
-            callback(result)
-        }
-        drefTimers[dref] = timer
-        return true
-    }
-    
-    public func stopUpdating(dref: String) {
-        if let timer = drefTimers[dref] {
-            timer.invalidate()
-            drefTimers[dref] = nil
-        }
-    }
-    
+    /*
+        Gets a single dataref. The request are queued to avoid getting drefs in a wrong order
+        See https://github.com/nasa/XPlaneConnect/issues/123
+    */
     public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
         var result: P.T?
         var clientError: Error?
@@ -68,27 +44,73 @@ public class XPLConnector: NSObject {
                 clientError = error
             }
             
-        }], waitUntilFinished: true)
+            }], waitUntilFinished: true)
         
         if let clientError = clientError {
             throw clientError
         }
         return result!
     }
-    
-    func startRequestingPosition() {
+
+    /*
+        Starts updating the give data ref and calls the callback regularly with the result value
+    */
+    public func startRequesting<P: Parser>(dref: String, parser: P, interval: TimeInterval = 0.5 , completionHandler: @escaping (P.T) -> Void) -> Bool {
+        
+        if drefTimers[dref] != nil {
+            // already updating
+            return false
+        }
+        
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+            if let result = try? self.get(dref: dref, parser: parser) {
+                completionHandler(result)
+            }
+        }
+        drefTimers[dref] = timer
+        return true
+    }
+
+    /*
+        Stops updating the given dref
+        @param The data ref to stop
+        @return false if the dataref was not updating
+    */
+    public func stopRequesting(dref: String) {
+        if let timer = drefTimers[dref] {
+            timer.invalidate()
+            drefTimers[dref] = nil
+        }
+    }
+    public func stopRequestingDataRefs() {
+        for (dref, _) in drefTimers {
+            stopRequesting(dref: dref)
+        }
+    }
+    // Starts requesting the GETP and calls the completion handler
+    public func startRequestingPosition(completionHandler: @escaping (XPCPosition) -> Void) {
         if (positionTimer != nil) {
             return
         }
-        
+
         positionTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
             if let position = try? self.client.getPosition() {
                 print("position: \(position)")
-                
-                 self.positionDelegate?.connector(self, didReceive: position)
+                completionHandler(position)
             }
         }
     }
+
+    /*
+        Stops requesting the position
+        @return false if the position was not updating
+    */
+    public func stopRequestingPosition() -> Bool {
+        if(positionTimer == nil) {
+            return false
+        }
+        positionTimer!.invalidate()
+        positionTimer = nil
+        return true
+    }
 }
-
-

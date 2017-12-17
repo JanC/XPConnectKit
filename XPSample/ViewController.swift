@@ -28,18 +28,20 @@ class ViewController: UIViewController {
     @IBOutlet var nav1Label: UILabel!
     @IBOutlet var nav1LabelStby: UILabel!
     
-    let frequencyFormetter =  NumberFormatter()
+    let frequencyFormatter =  NumberFormatter()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        connector.positionDelegate = self
+//        connector.positionDelegate = self
         
-        frequencyFormetter.maximumFractionDigits = 2
-        frequencyFormetter.minimumFractionDigits = 2
+        frequencyFormatter.maximumFractionDigits = 2
+        frequencyFormatter.minimumFractionDigits = 2
     }
     
     @IBAction func stopAction() {
+        let _ = connector.stopRequestingPosition()
+        connector.stopRequestingDataRefs()
         
     }
     @IBAction func startAction() {
@@ -59,12 +61,12 @@ class ViewController: UIViewController {
     func requestDREF() {
         if let dataRef = try? client.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
             print("nav1: \(dataRef)")
-            self.nav1Label.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+            self.nav1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
         if let dataRef = try? client.get(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) {
             print("nav2: \(dataRef)")
-            self.nav1LabelStby.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+            self.nav1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
 //        if let tailNum = try? client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
@@ -76,51 +78,51 @@ class ViewController: UIViewController {
     
     func startUpdatingDrefs() {
         
-        let _ = connector.startUpdating(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) { dataRef in
-            self.nav1Label.text = "\(self.frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) { dataRef in
+            self.nav1Label.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
-        let _ = connector.startUpdating(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
-            self.nav1LabelStby.text = "\(self.frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
+            self.nav1LabelStby.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
-        let _ = connector.startUpdating(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) { dataRef in
-            self.com1Label.text = "\(self.frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) { dataRef in
+            self.com1Label.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
-        let _ = connector.startUpdating(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
-            self.com1LabelStby.text = "\(self.frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
+            self.com1LabelStby.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
         }
         
     }
-    func requestDREFConnector() {
-        
-        
-        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
-            self.nav1Label.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
-        }
-        
-        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) {
-            self.nav1LabelStby.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
-        }
-        
-        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) {
-            self.com1Label.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
-        }
-        
-        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) {
-            self.com1LabelStby.text = "\(frequencyFormetter.string(from: NSNumber(value: dataRef/100))!)"
-        }
+//    func requestDREFConnector() {
+//
+//
+//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
+//            self.nav1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+//        }
+//
+//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) {
+//            self.nav1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+//        }
+//
+//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) {
+//            self.com1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+//        }
+//
+//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) {
+//            self.com1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+//        }
         
 //        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
 //            print("tail num: \(tailNum)")
 //        }
-    }
+//    }
 }
 
-extension ViewController: XPLConnectorDelegate {
-    func connector(_ connector: XPLConnector, didReceive position: XPCPosition) {
-        print("\(#function): \(position)")
-    }
-}
+//extension ViewController: XPLConnectorDelegate {
+//    func connector(_ connector: XPLConnector, didReceive position: XPCPosition) {
+//        print("\(#function): \(position)")
+//    }
+//}
 
