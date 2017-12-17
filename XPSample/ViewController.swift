@@ -52,8 +52,9 @@ class ViewController: UIViewController {
         
         connector.startRequestingPosition { position in
             self.altLabel.text = position.location.altitude.feet.value.formattedAltitude
-//            self.speedLabel.text = position.location.speed.knots.value.formattedSpeedKnots
         }
+        
+        connector.send(dref: "sim/cockpit/radios/nav1_freq_hz", value: 12345.00)
     }
     
     func startUpdatingDrefs() {
@@ -98,19 +99,7 @@ class ViewController: UIViewController {
             self.windDirectionLabel.text = "\(dataRef) °"
         }
         
-        
-
-//        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
-//            print("tail num: \(tailNum)")
-//        }
-        
     }
-
-        
-//        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
-//            print("tail num: \(tailNum)")
-//        }
-//    }
 }
 
 

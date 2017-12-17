@@ -28,7 +28,7 @@ public class XPLConnector: NSObject {
         dataRefQueue.maxConcurrentOperationCount = 1
     }
 
-    // MARK: - Data Refs
+    // MARK: - Get Data Refs
     
     /*
         Gets a single dataref. The request are queued to avoid getting drefs in a wrong order
@@ -87,6 +87,19 @@ public class XPLConnector: NSObject {
             stopRequesting(dref: dref)
         }
     }
+    
+    // MARK: - Send Data Ref
+    
+    public func send(dref: String, value: Float) {
+        client.send(dref: dref, values: [value])
+    }
+    
+    public func send(dref: String, values: [Float]) {
+        client.send(dref: dref, values: values)
+    }
+    
+    // MARK: - Position
+    
     // Starts requesting the GETP and calls the completion handler
     public func startRequestingPosition(completionHandler: @escaping (XPCPosition) -> Void) {
         if (positionTimer != nil) {

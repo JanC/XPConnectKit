@@ -56,4 +56,9 @@ public class XPCClient {
         
         let result = Array(UnsafeBufferPointer(start: values, count: Int(actualSize)))
         return try parser.parse(values: result)
+    }
+    
+    public func send(dref: String, values: [Float]) {
+        sendDREF(socket, dref.cString(using: .utf8), UnsafeMutablePointer<Float>(mutating: values), Int32(values.count))
+    }
 }
