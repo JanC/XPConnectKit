@@ -8,6 +8,8 @@
 
 import UIKit
 import XPConnectKit
+import UnitKit
+import CoreLocation
 
 class ViewController: UIViewController {
 
@@ -19,6 +21,7 @@ class ViewController: UIViewController {
     
     @IBOutlet var connectionLabel: UILabel!
     @IBOutlet var speedLabel: UILabel!
+    @IBOutlet var speedAirLabel: UILabel!
     @IBOutlet var verticalLabel: UILabel!
     @IBOutlet var altLabel: UILabel!
     
@@ -28,15 +31,15 @@ class ViewController: UIViewController {
     @IBOutlet var nav1Label: UILabel!
     @IBOutlet var nav1LabelStby: UILabel!
     
-    let frequencyFormatter =  NumberFormatter()
-
+    @IBOutlet var tailnumLabel: UILabel!
+    
+    @IBOutlet var windSpeedLabel: UILabel!
+    @IBOutlet var windDirectionLabel: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        connector.positionDelegate = self
-        
-        frequencyFormatter.maximumFractionDigits = 2
-        frequencyFormatter.minimumFractionDigits = 2
+
     }
     
     @IBAction func stopAction() {
@@ -45,74 +48,64 @@ class ViewController: UIViewController {
         
     }
     @IBAction func startAction() {
-//        connector.start()
-        
-        
-
-//        Timer.scheduledTimer(withTimeInterval: 0.001, repeats: true) { (_) in
-//            if let position = try? self.client.getPosition() {
-//                print("position: \(position)")
-//            }
-//            self.requestDREFConnector()
         startUpdatingDrefs()
-//        }
-    }
-    
-    func requestDREF() {
-        if let dataRef = try? client.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
-            print("nav1: \(dataRef)")
-            self.nav1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+        
+        connector.startRequestingPosition { position in
+            self.altLabel.text = position.location.altitude.feet.value.formattedAltitude
+//            self.speedLabel.text = position.location.speed.knots.value.formattedSpeedKnots
         }
-        
-        if let dataRef = try? client.get(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) {
-            print("nav2: \(dataRef)")
-            self.nav1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
-        }
-        
-//        if let tailNum = try? client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
-//            print("tail num: \(tailNum)")
-//        }
-        
-//        print("nav1: \(nav1 ?? "-" ) tail num: \(tailNum)")
     }
     
     func startUpdatingDrefs() {
         
-        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) { dataRef in
-            self.nav1Label.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_freq_hz", parser: IntParser()) { dataRef in
+            self.nav1Label.text = dataRef.formattedFrequency
+        }
+
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: IntParser()) { dataRef in
+            self.nav1LabelStby.text = dataRef.formattedFrequency
+        }
+
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser()) { dataRef in
+            self.com1Label.text = dataRef.formattedFrequency
+        }
+
+        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: IntParser()) { dataRef in
+            self.com1LabelStby.text = dataRef.formattedFrequency
+        }
+
+        let _ = connector.startRequesting(dref: "sim/flightmodel/position/vh_ind", parser: FloatPraser()) { dataRef in
+            self.verticalLabel.text = CLLocationSpeed(dataRef).fpm.formattedSpeedFPM
         }
         
-        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
-            self.nav1LabelStby.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) { dataRef in
+            self.tailnumLabel.text = dataRef
+        }
+
+        let _ = connector.startRequesting(dref: "sim/flightmodel/position/indicated_airspeed", parser: FloatPraser()) { dataRef in
+            self.speedAirLabel.text = Double(dataRef).formattedSpeedKnots
+         }
+        
+        let _ = connector.startRequesting(dref: "sim/flightmodel/position/groundspeed", parser: FloatPraser()) { dataRef in
+            self.speedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
         }
         
-        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) { dataRef in
-            self.com1Label.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/weather/wind_speed_kt", parser: FloatPraser()) { dataRef in
+            self.windSpeedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
         }
         
-        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) { dataRef in
-            self.com1LabelStby.text = "\(self.frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
+        let _ = connector.startRequesting(dref: "sim/weather/wind_direction_degt", parser: IntParser()) { dataRef in
+            self.windDirectionLabel.text = "\(dataRef) °"
         }
+        
+        
+
+//        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
+//            print("tail num: \(tailNum)")
+//        }
         
     }
-//    func requestDREFConnector() {
-//
-//
-//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_freq_hz", parser: FloatPraser()) {
-//            self.nav1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
-//        }
-//
-//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: FloatPraser()) {
-//            self.nav1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
-//        }
-//
-//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: FloatPraser()) {
-//            self.com1Label.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
-//        }
-//
-//        if let dataRef = try? connector.get(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: FloatPraser()) {
-//            self.com1LabelStby.text = "\(frequencyFormatter.string(from: NSNumber(value: dataRef/100))!)"
-//        }
+
         
 //        if let tailNum = try? connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) {
 //            print("tail num: \(tailNum)")
@@ -120,9 +113,4 @@ class ViewController: UIViewController {
 //    }
 }
 
-//extension ViewController: XPLConnectorDelegate {
-//    func connector(_ connector: XPLConnector, didReceive position: XPCPosition) {
-//        print("\(#function): \(position)")
-//    }
-//}
 

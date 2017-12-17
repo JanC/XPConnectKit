@@ -48,6 +48,25 @@ public struct FloatPraser: Parser {
     }
 }
 
+public struct IntParser: Parser {
+    
+    public typealias T = Int
+    
+    public let expectedSize: Int
+    
+    public init() {
+        self.expectedSize = 1
+    }
+    
+    public func parse(values: [Float]) throws -> Int {
+        let result =  Int64(values.first!)
+        if result > Int.max {
+            fatalError("This should not happen")
+        }
+        return Int(result)
+    }
+}
+
 public struct StringParser: Parser {
     public typealias T = String
     
