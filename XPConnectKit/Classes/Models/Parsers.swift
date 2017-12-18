@@ -59,8 +59,8 @@ public struct IntParser: Parser {
     }
     
     public func parse(values: [Float]) throws -> Int {
-        let result =  Int64(values.first!)
-        if result > Int.max {
+        let result = values.first!
+        if result > Float(Int.max) {
             fatalError("This should not happen")
         }
         return Int(result)
