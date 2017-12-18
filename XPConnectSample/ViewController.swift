@@ -13,8 +13,8 @@ import CoreLocation
 
 class ViewController: UIViewController {
 
-//    static let host = "192.168.1.197"
-    static let host = "192.168.0.5"
+    static let host = "192.168.1.197"
+//    static let host = "192.168.0.5"
     
     let client = XPCClient(host: ViewController.host)
     let connector = XPLConnector(host: ViewController.host)
@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet var speedAirLabel: UILabel!
     @IBOutlet var verticalLabel: UILabel!
     @IBOutlet var altLabel: UILabel!
+    @IBOutlet var altAglLabel: UILabel!
     
     @IBOutlet var com1Label: UILabel!
     @IBOutlet var com1LabelStby: UILabel!
@@ -78,7 +79,7 @@ class ViewController: UIViewController {
         let _ = connector.startRequesting(dref: "sim/flightmodel/position/vh_ind", parser: FloatPraser()) { dataRef in
             self.verticalLabel.text = CLLocationSpeed(dataRef).fpm.formattedSpeedFPM
         }
-        
+
         let _ = connector.startRequesting(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) { dataRef in
             self.tailnumLabel.text = dataRef
         }
@@ -86,9 +87,13 @@ class ViewController: UIViewController {
         let _ = connector.startRequesting(dref: "sim/flightmodel/position/indicated_airspeed", parser: FloatPraser()) { dataRef in
             self.speedAirLabel.text = Double(dataRef).formattedSpeedKnots
          }
-        
+
         let _ = connector.startRequesting(dref: "sim/flightmodel/position/groundspeed", parser: FloatPraser()) { dataRef in
             self.speedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
+        }
+
+        let _ = connector.startRequesting(dref: "sim/flightmodel/position/y_agl", parser: FloatPraser()) { dataRef in
+            self.altAglLabel.text = Double(dataRef).feet.value.formattedAltitude
         }
         
         let _ = connector.startRequesting(dref: "sim/weather/wind_speed_kt", parser: FloatPraser()) { dataRef in
