@@ -50,6 +50,32 @@ public class XPLConnector: NSObject {
             throw clientError
         }
         return result!
+    
+    }
+    
+    public func get(drefs: [String]) throws -> [[Float]] {
+        var result = [[Float]]()
+        var clientError: Error?
+        dataRefQueue.addOperations([BlockOperation {
+            do {
+                result = try self.client.get(drefs: drefs)
+            } catch {
+                clientError = error
+            }
+        }], waitUntilFinished: true)
+        
+        if let clientError = clientError {
+            throw clientError
+        }
+        return result
+    }
+    
+    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, completionHandler: @escaping ([[Float]]) -> Void) -> Timer {
+        return Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
+            if let result = try? self.get(drefs: drefs) {
+                completionHandler(result)
+            }
+        })
     }
 
     /*

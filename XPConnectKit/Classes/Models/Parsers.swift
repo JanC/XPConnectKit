@@ -77,8 +77,6 @@ public struct StringParser: Parser {
     }
     
     public func parse(values: [Float]) throws -> String {
-        // map the Flats to chars
-//        print("parsing String \(values)")
         let chars = try values.map { (float) -> CChar in
             
             let int = Int(float)
@@ -88,12 +86,10 @@ public struct StringParser: Parser {
             return CChar(float)
             
         }
-//        print("chars: \(chars)")
         let string: String = chars.withUnsafeBufferPointer { ptr in
             let s = String(cString: ptr.baseAddress!)
             return s
         }
-//        print("string: \(string)")
         return string
     }
 }

@@ -40,21 +40,93 @@ public class XPCClient {
         
     }
     
-    public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
-
-        var size: Int32 = 50 // expected Size
-        let pSize = UnsafeMutablePointer<Int32>(&size)
-        let values = UnsafeMutablePointer<Float>.allocate(capacity: Int(size))
+    public func get(dref: String, expectedSize: Int32 = 255) throws -> [Float] {
+        var size = expectedSize
         
+        // get the pointer to the size
+        let pSize = UnsafeMutablePointer<Int32>(&size)
+        
+        // allocate an float array with that size
+        let values = UnsafeMutablePointer<Float>.allocate(capacity: Int(size))
+    
         if(getDREF(socket, dref.cString(using: .utf8)!, values, pSize) < 0) {
             throw XPError.network
         }
-        
+    
+        // the content of exepcted size is now the actual size
         let actualSize = pSize.withMemoryRebound(to: Int32.self, capacity: 1) { pointer in
             return pointer.pointee
         }
-        
+
+        // copy the values
         let result = Array(UnsafeBufferPointer(start: values, count: Int(actualSize)))
+        return result
+    }
+    
+//    public func get(drefs: [String], expctedSizes: [Int32]? = nil) throws -> [[Float]] {
+//        // todo call getDREFs instead!
+//        let expected = expctedSizes != nil ? expctedSizes! : Array(repeating: Int32(255), count: drefs.count)
+//
+//        var results = [[Float]]()
+//        for (index, dref) in drefs.enumerated() {
+//
+//            let result = try get(dref: dref, expectedSize: expected[index])
+//            results.append(result)
+//        }
+//        return results
+//    }
+    
+    public func get(drefs: [String], expectedSizes: [Int32]? = nil) throws -> [[Float]] {
+
+        let expected = expectedSizes != nil ? expectedSizes! : Array(repeating: Int32(255), count: drefs.count)
+        
+        var valuesArray = [UnsafeMutablePointer<Float>?]()
+
+        for size in expected {
+            let values = UnsafeMutablePointer<Float>.allocate(capacity: Int(size))
+            valuesArray.append(values)
+        }
+        
+//        let sizesArray = UnsafeMutablePointer<Int32>.allocate(capacity: Int(drefs.count))
+        let sizesArray = UnsafeMutablePointer<Int32>(mutating: expected)
+
+//        var cDrefs = [UnsafePointer<Int8>]()
+//        for dref in drefs {
+//
+//            let cs = (dref as NSString).utf8String
+//            let cDref = UnsafeMutablePointer<Int8>(mutating: cs)!
+//            cDrefs.append(cDref)
+//        }
+        
+        var cargs = drefs.map {  UnsafePointer<Int8>(strdup($0)) }
+    
+        if(getDREFs(socket, &cargs, &valuesArray, UInt8(drefs.count), sizesArray) < 0) {
+            throw XPError.network
+        }
+        
+        var results = [[Float]]()
+        let actualSizes = Array(UnsafeBufferPointer(start: sizesArray, count: drefs.count))
+        for (index, values) in valuesArray.enumerated() {
+            let actualSize = actualSizes[index]
+            let result = Array(UnsafeBufferPointer(start: values, count: Int(actualSize)))
+            results.append(result)
+        }
+        return results
+    }
+    
+
+    
+    public func withArrayOfCStrings<R>(_ args: [String], _ body: ([UnsafeMutablePointer<CChar>?]) -> R) -> R {
+        var cStrings = args.map { strdup($0) }
+        cStrings.append(nil)
+        defer {
+            cStrings.forEach { free($0) }
+        }
+        return body(cStrings)
+    }
+    
+    public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
+        let result = try get(dref: dref)
         return try parser.parse(values: result)
     }
     
