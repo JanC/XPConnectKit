@@ -28,6 +28,7 @@ public struct XPCPosition {
     public let roll: Float
     public let pitch: Float
     public let heading: Double
+    public let elevation: Double
     
     init?(aircraftId: Int, values: [Float]) {
         if(values.count != Indexes.count) {
@@ -40,6 +41,7 @@ public struct XPCPosition {
         roll = values[Indexes.roll.rawValue]
         pitch = values[Indexes.pitch.rawValue]
         heading = Double(values[Indexes.heading.rawValue])
+        elevation = Double(values[Indexes.elevation.rawValue])
     
     }
 }
