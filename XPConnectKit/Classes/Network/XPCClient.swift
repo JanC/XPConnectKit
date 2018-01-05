@@ -87,7 +87,6 @@ public class XPCClient {
             valuesArray.append(values)
         }
         
-//        let sizesArray = UnsafeMutablePointer<Int32>.allocate(capacity: Int(drefs.count))
         let sizesArray = UnsafeMutablePointer<Int32>(mutating: expected)
 
 //        var cDrefs = [UnsafePointer<Int8>]()
@@ -111,10 +110,11 @@ public class XPCClient {
             let result = Array(UnsafeBufferPointer(start: values, count: Int(actualSize)))
             results.append(result)
         }
+        
+        // todo see https://stackoverflow.com/questions/47911577/convert-swift-string-array-to-c-char?noredirect=1#comment83198421_47911577
+        // for ptr in cargs { free(UnsafeMutablePointer(mutating: ptr)) }
         return results
     }
-    
-
     
     public func withArrayOfCStrings<R>(_ args: [String], _ body: ([UnsafeMutablePointer<CChar>?]) -> R) -> R {
         var cStrings = args.map { strdup($0) }
