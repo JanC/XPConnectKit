@@ -11,7 +11,7 @@
 		8A12A93A1FE19473002F07F5 /* XPCConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A12A9391FE19473002F07F5 /* XPCConnector.swift */; };
 		8A60DB8E1FD5FD6D003076B6 /* XPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DB8D1FD5FD6D003076B6 /* XPCClient.swift */; };
 		8A60DBB51FD6002C003076B6 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A60DBB21FD6002C003076B6 /* CMakeLists.txt */; };
-		8A60DBB61FD6002C003076B6 /* xplaneConnect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DBB31FD6002C003076B6 /* xplaneConnect.c */; };
+		8A60DBB61FD6002C003076B6 /* xplaneConnect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DBB31FD6002C003076B6 /* xplaneConnect.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		8A60DBB71FD6002C003076B6 /* xplaneConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A60DBB41FD6002C003076B6 /* xplaneConnect.h */; };
 		8A60DBBF1FD60523003076B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DBBE1FD60523003076B6 /* AppDelegate.swift */; };
 		8A60DBC11FD60523003076B6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A60DBC01FD60523003076B6 /* ViewController.swift */; };
