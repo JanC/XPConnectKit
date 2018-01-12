@@ -21,11 +21,19 @@ public class XPLConnector: NSObject {
     
     var positionTimer: Timer?
     var drefTimers = [String: Timer]()
-    var dataRefQueue = OperationQueue()
+
+    // a queue that ensures that only 1 request at time is sent
+    var synchronousQueue = OperationQueue()
+
+    let backgroundQueue: OperationQueue = {
+       let q = OperationQueue()
+        q.name = "net.tequilaapps.xpconnector"
+        return q
+    }()
     
     public init(host: String) {
         client = XPCClient(host: host)
-        dataRefQueue.maxConcurrentOperationCount = 1
+        synchronousQueue.maxConcurrentOperationCount = 1
     }
 
     // MARK: - Get Data Refs
@@ -37,7 +45,7 @@ public class XPLConnector: NSObject {
     public func get<P: Parser>(dref: String, parser: P) throws -> P.T {
         var result: P.T?
         var clientError: Error?
-        dataRefQueue.addOperations([BlockOperation {
+        synchronousQueue.addOperations([BlockOperation {
             do {
                 result = try self.client.get(dref: dref, parser: parser)
             } catch {
@@ -56,7 +64,7 @@ public class XPLConnector: NSObject {
     public func get(drefs: [String]) throws -> [[Float]] {
         var result = [[Float]]()
         var clientError: Error?
-        dataRefQueue.addOperations([BlockOperation {
+        synchronousQueue.addOperations([BlockOperation {
             do {
                 result = try self.client.get(drefs: drefs)
             } catch {
@@ -72,8 +80,15 @@ public class XPLConnector: NSObject {
     
     public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, completionHandler: @escaping ([[Float]]) -> Void) -> Timer {
         return Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
-            if let result = try? self.get(drefs: drefs) {
-                completionHandler(result)
+
+            self.backgroundQueue.addOperation() {
+                if let result = try? self.get(drefs: drefs) {
+                    
+                    OperationQueue.main.addOperation() {
+                        completionHandler(result)
+                    }
+
+                }
             }
         })
     }
