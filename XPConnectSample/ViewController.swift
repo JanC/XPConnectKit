@@ -8,7 +8,6 @@
 
 import UIKit
 import XPConnectKit
-import UnitKit
 import CoreLocation
 
 class ViewController: UIViewController {
@@ -47,6 +46,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let client = XPCClient(host: "192.168.1.1")
+        do {
+            // com1 is an Int
+            let com1 = try client.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
+            print("com1: \(com1)")
+            
+            // result is a String
+            let tailnum = try client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
+            print("tailnum: \(tailnum)")
+            
+        } catch {
+            print("error: \(error)")
+        }
+
     }
     
     @IBAction func stopAction() {
@@ -64,44 +77,35 @@ class ViewController: UIViewController {
         startRequestingRadios()
         startRequestingWeather()
         startRequestingAlt()
-
-        
-//        startUpdatingDrefs()
-//
-//        connector.startRequestingPosition { position in
-//            self.altLabel.text = position.location.altitude.feet.value.formattedAltitude
-//        }
-//
-//        connector.send(dref: "sim/cockpit/radios/nav1_freq_hz", value: 12345.00)
     }
     
     func startRequestingRadios() {
-        let radioDrefs = [
-            "sim/cockpit/radios/com1_freq_hz",
-            "sim/cockpit/radios/com1_stdby_freq_hz",
-            "sim/cockpit/radios/nav1_freq_hz",
-            "sim/cockpit/radios/nav1_stdby_freq_hz",
-            ]
-        
-        let parser = IntParser()
-        radioTimer = connector.startRequesting(drefs: radioDrefs) { (values) in
-            do {
-                var index = 0
-                self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
-                index += 1
-                
-                self.com1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-                index += 1
-                
-                self.nav1Label.text = try parser.parse(values: values[index]).formattedFrequency
-                index += 1
-                
-                self.nav1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-                index += 1
-            } catch {
-                print("Could not parse dref: \(error)")
-            }
+    let radioDrefs = [
+        "sim/cockpit/radios/com1_freq_hz",
+        "sim/cockpit/radios/com1_stdby_freq_hz",
+        "sim/cockpit/radios/nav1_freq_hz",
+        "sim/cockpit/radios/nav1_stdby_freq_hz",
+        ]
+    
+    let parser = IntParser()
+    radioTimer = connector.startRequesting(drefs: radioDrefs) { (values) in
+        do {
+            var index = 0
+            self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
+            index += 1
+            
+            self.com1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
+            index += 1
+            
+            self.nav1Label.text = try parser.parse(values: values[index]).formattedFrequency
+            index += 1
+            
+            self.nav1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
+            index += 1
+        } catch {
+            print("Could not parse dref: \(error)")
         }
+    }
     }
     
     func stopRequestingRadios() {
@@ -116,7 +120,7 @@ class ViewController: UIViewController {
             "sim/flightmodel/position/groundspeed"
             ]
         
-        let parser = FloatPraser()
+        let parser = FloatParser()
         speedTimer = connector.startRequesting(drefs: drefs) { (values) in
             do {
                 var index = 0
@@ -147,7 +151,7 @@ class ViewController: UIViewController {
             "sim/weather/wind_direction_degt"
         ]
         
-        let parser = FloatPraser()
+        let parser = FloatParser()
         weatherTimer = connector.startRequesting(drefs: drefs) { (values) in
             do {
                 var index = 0
@@ -176,7 +180,7 @@ class ViewController: UIViewController {
             "sim/flightmodel/position/y_agl"
         ]
         
-        let parser = FloatPraser()
+        let parser = FloatParser()
         altTimer = connector.startRequesting(drefs: drefs) { (values) in
             do {
                 var index = 0
@@ -231,7 +235,7 @@ class ViewController: UIViewController {
 //            self.speedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
 //        }
 
-        let _ = connector.startRequesting(dref: "sim/flightmodel/position/y_agl", parser: FloatPraser()) { dataRef in
+        let _ = connector.startRequesting(dref: "sim/flightmodel/position/y_agl", parser: FloatParser()) { dataRef in
             self.altAglLabel.text = Double(dataRef).feet.value.formattedAltitude
         }
         

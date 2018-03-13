@@ -18,14 +18,14 @@ public protocol Parser {
     func parse(values: [Float]) throws -> T
 }
 
-public struct FloatArrayPraser: Parser {
+public struct FloatArrayParser: Parser {
     
     public typealias T = [Float]
     
     public let expectedSize: Int
     
-    public init(epxectedSize: Int = 50) {
-        self.expectedSize = epxectedSize
+    public init(expectedSize: Int = 50) {
+        self.expectedSize = expectedSize
     }
     
     public func parse(values: [Float]) throws -> [Float] {
@@ -33,7 +33,7 @@ public struct FloatArrayPraser: Parser {
     }
 }
 
-public struct FloatPraser: Parser {
+public struct FloatParser: Parser {
     
     public typealias T = Float
     
@@ -72,8 +72,8 @@ public struct StringParser: Parser {
     
     public let expectedSize: Int
     
-    public init(epxectedSize: Int = 40) {
-        self.expectedSize = epxectedSize
+    public init(expectedSize: Int = 40) {
+        self.expectedSize = expectedSize
     }
     
     public func parse(values: [Float]) throws -> String {
