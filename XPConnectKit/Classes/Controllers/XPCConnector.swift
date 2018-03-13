@@ -8,14 +8,15 @@
 
 import Foundation
 
-//public protocol XPLConnectorDelegate {
-//
-//    func connector(_ connector: XPLConnector, didReceive position: XPCPosition)
-//}
 
 public class XPLConnector: NSObject {
+    
+    public enum Result {
+        case success([[Float]])
+        case failure(Error)
+    }
 
-//    public var positionDelegate: XPLConnectorDelegate?
+
     // MARK: - Private
     let client: XPCClient
     
@@ -78,16 +79,20 @@ public class XPLConnector: NSObject {
         return result
     }
     
-    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, completionHandler: @escaping ([[Float]]) -> Void) -> Timer {
+    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, resultCallback: @escaping (Result) -> Void) -> Timer {
         return Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
 
+            if self.backgroundQueue.operations.count >= 1 {
+                print("Skipping drefs request because one is already in progress. You might want to lower the update interval")
+                return
+            }
+            
             self.backgroundQueue.addOperation() {
-                if let result = try? self.get(drefs: drefs) {
-                    
-                    OperationQueue.main.addOperation() {
-                        completionHandler(result)
-                    }
-
+                do {
+                    let result = try self.get(drefs: drefs)
+                    resultCallback(Result.success(result))
+                } catch {
+                    resultCallback(Result.failure(error))
                 }
             }
         })

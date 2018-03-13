@@ -73,10 +73,10 @@ class ViewController: UIViewController {
         
     }
     @IBAction func startAction() {
-        startRequestingSpeed()
+//        startRequestingSpeed()
         startRequestingRadios()
-        startRequestingWeather()
-        startRequestingAlt()
+//        startRequestingWeather()
+//        startRequestingAlt()
     }
     
     func startRequestingRadios() {
@@ -86,26 +86,31 @@ class ViewController: UIViewController {
         "sim/cockpit/radios/nav1_freq_hz",
         "sim/cockpit/radios/nav1_stdby_freq_hz",
         ]
-    
-    let parser = IntParser()
-    radioTimer = connector.startRequesting(drefs: radioDrefs) { (values) in
-        do {
-            var index = 0
-            self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
-            index += 1
-            
-            self.com1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-            index += 1
-            
-            self.nav1Label.text = try parser.parse(values: values[index]).formattedFrequency
-            index += 1
-            
-            self.nav1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-            index += 1
-        } catch {
-            print("Could not parse dref: \(error)")
+        
+        let parser = IntParser()
+        radioTimer = connector.startRequesting(drefs: radioDrefs) { (result) in
+            switch result {
+            case .success(let values):
+                do {
+                    var index = 0
+                    self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.com1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.nav1Label.text = try parser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.nav1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                } catch {
+                    print("Could not parse dref: \(error)")
+                }
+            case .failure(let error):
+                self.handle(error: error)
+            }
         }
-    }
     }
     
     func stopRequestingRadios() {
@@ -121,22 +126,35 @@ class ViewController: UIViewController {
             ]
         
         let parser = FloatParser()
-        speedTimer = connector.startRequesting(drefs: drefs) { (values) in
-            do {
-                var index = 0
-                self.verticalLabel.text = try CLLocationSpeed(parser.parse(values: values[index])).fpm.formattedSpeedFPM
-                
-                index += 1
-                
-                self.speedAirLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
-                index += 1
-                
-                self.speedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
-                index += 1
-
-            } catch {
-                print("Could not parse dref: \(error)")
+        speedTimer = connector.startRequesting(drefs: drefs) { (result) in
+            
+            switch result {
+            case .success(let values):
+                do {
+                    var index = 0
+                    self.verticalLabel.text = try CLLocationSpeed(parser.parse(values: values[index])).fpm.formattedSpeedFPM
+                    
+                    index += 1
+                    
+                    self.speedAirLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
+                    index += 1
+                    
+                    self.speedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
+                    index += 1
+                    
+                } catch {
+                    print("Could not parse dref: \(error)")
+                }
+            case .failure(let error):
+                self.handle(error: error)
             }
+        }
+    }
+    
+    func handle(error: Error) {
+        print("Error: \(error)")
+        if case XPError.network = error {
+            // stop polling here
         }
     }
     
@@ -152,20 +170,27 @@ class ViewController: UIViewController {
         ]
         
         let parser = FloatParser()
-        weatherTimer = connector.startRequesting(drefs: drefs) { (values) in
-            do {
-                var index = 0
-                self.windSpeedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
-                
-                index += 1
-                
-                let direction = try IntParser().parse(values: values[index])
-                self.windDirectionLabel.text = "\(direction)°"
-                index += 1
-                
-            } catch {
-                print("Could not parse dref: \(error)")
+        weatherTimer = connector.startRequesting(drefs: drefs) { (result) in
+            
+            switch result {
+            case .success(let values):
+                do {
+                    var index = 0
+                    self.windSpeedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
+                    
+                    index += 1
+                    
+                    let direction = try IntParser().parse(values: values[index])
+                    self.windDirectionLabel.text = "\(direction)°"
+                    index += 1
+                    
+                } catch {
+                    print("Could not parse dref: \(error)")
+                }
+            case .failure(let error):
+                self.handle(error: error)
             }
+
         }
     }
     
@@ -181,18 +206,24 @@ class ViewController: UIViewController {
         ]
         
         let parser = FloatParser()
-        altTimer = connector.startRequesting(drefs: drefs) { (values) in
-            do {
-                var index = 0
-
-                self.altLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
-                index += 1
-                
-                self.altAglLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
-                index += 1
-                
-            } catch {
-                print("Could not parse dref: \(error)")
+        altTimer = connector.startRequesting(drefs: drefs) { (result) in
+            
+            switch result {
+            case .success(let values):
+                do {
+                    var index = 0
+                    
+                    self.altLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
+                    index += 1
+                    
+                    self.altAglLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
+                    index += 1
+                    
+                } catch {
+                    print("Could not parse dref: \(error)")
+                }
+            case .failure(let error):
+                self.handle(error: error)
             }
         }
     }
