@@ -79,10 +79,10 @@ public class XPLConnector: NSObject {
         return result
     }
     
-    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, resultCallback: @escaping (Result) -> Void) -> Timer {
+    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) -> Timer {
         return Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
 
-            if self.backgroundQueue.operations.count >= 1 {
+            if self.backgroundQueue.operations.count >= 5 {
                 print("Skipping drefs request because one is already in progress. You might want to lower the update interval")
                 return
             }
@@ -90,9 +90,13 @@ public class XPLConnector: NSObject {
             self.backgroundQueue.addOperation() {
                 do {
                     let result = try self.get(drefs: drefs)
-                    resultCallback(Result.success(result))
+                    callbackQueue.addOperation {
+                        resultCallback(Result.success(result))
+                    }
                 } catch {
-                    resultCallback(Result.failure(error))
+                    callbackQueue.addOperation {
+                        resultCallback(Result.failure(error))
+                    }
                 }
             }
         })
