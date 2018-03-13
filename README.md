@@ -39,21 +39,28 @@ github "JanC/XPConnectKit"
 
 ## Usage example
 
-### Getting DREFs
+The base class is the `XPLConnector` that you initialize with the ip or host name of the X-Plane running the XPlaneConnect server:
 
-The base class is the `XPCClient` that returns an array of Floats for any dref string. To facilitate the parsing into expected types, you can supply a `Parser` that will parse the float array into the type you expect:
+```swift
+let connector = XPLConnector(host: "192.168.1.10")
+```
+
+
+### Single DREFs
+
+To get a signle data ref, call the `connector.get(dref:"...")` method. To facilitate the parsing into expected types, you have to supply a `Parser` that will parse the float array into the type you expect:
 
 ```swift
 
-let client = XPCClient(host: "192.168.1.10")
+let connector = connector(host: "192.168.1.10")
 
 do {
     // The com1_freq_hz values is an Int e.g. 11800 so we pass IntParser
-    let com1 = try client.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
+    let com1 = try connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
     print("com1: \(com1)")
     
     // The acf_tailnum values is an String so we pass StringParser
-    let tailnum = try client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
+    let tailnum = try connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
     print("tailnum: \(tailnum)")
     
 } catch {
@@ -61,7 +68,7 @@ do {
 }
 ```
 
-### Polling
+### Polling multiple DREF
 Work in progress
 
 You can use the `XPLConnector` to poll regurarly for a set of data refs. The closure with the result values will be called regurarly and result is a two dimentional array of Floats. You can use again a `Parser` to get the expected value:

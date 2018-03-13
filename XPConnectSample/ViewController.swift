@@ -12,8 +12,8 @@ import CoreLocation
 
 class ViewController: UIViewController {
     
-    static let host = "192.168.1.121"
-    //    static let host = "192.168.1.197"
+//    static let host = "192.168.1.121"
+        static let host = "192.168.1.197"
     //    static let host = "192.168.0.5"
     
     let client = XPCClient(host: ViewController.host)
@@ -46,20 +46,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let client = XPCClient(host: "192.168.1.1")
+        let connector = XPLConnector(host: "192.168.1.1")
+        
         do {
             // com1 is an Int
-            let com1 = try client.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
+            let com1 = try connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
             print("com1: \(com1)")
             
             // result is a String
-            let tailnum = try client.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
+            let tailnum = try connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
             print("tailnum: \(tailnum)")
             
         } catch {
             print("error: \(error)")
         }
-        
     }
     
     @IBAction func stopAction() {
