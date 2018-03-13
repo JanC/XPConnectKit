@@ -63,7 +63,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func stopAction() {
-        let _ = connector.stopRequestingPosition()
         connector.stopRequestingDataRefs()
         
         stopRequestingSpeed()
@@ -73,10 +72,10 @@ class ViewController: UIViewController {
         
     }
     @IBAction func startAction() {
-//        startRequestingSpeed()
+        startRequestingSpeed()
         startRequestingRadios()
-//        startRequestingWeather()
-//        startRequestingAlt()
+        startRequestingWeather()
+        startRequestingAlt()
     }
     
     func startRequestingRadios() {
@@ -231,57 +230,6 @@ class ViewController: UIViewController {
     func stopRequestingAlt() {
         altTimer?.invalidate()
         altTimer = nil
-    }
-
-    
-    func startUpdatingDrefs() {
-        
-//        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_freq_hz", parser: IntParser()) { dataRef in
-//            self.nav1Label.text = dataRef.formattedFrequency
-//        }
-//
-//        let _ = connector.startRequesting(dref: "sim/cockpit/radios/nav1_stdby_freq_hz", parser: IntParser()) { dataRef in
-//            self.nav1LabelStby.text = dataRef.formattedFrequency
-//        }
-//
-//        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser()) { dataRef in
-//            self.com1Label.text = dataRef.formattedFrequency
-//        }
-//
-//        let _ = connector.startRequesting(dref: "sim/cockpit/radios/com1_stdby_freq_hz", parser: IntParser()) { dataRef in
-//            self.com1LabelStby.text = dataRef.formattedFrequency
-//        }
-
-//        let _ = connector.startRequesting(dref: "sim/flightmodel/position/vh_ind", parser: FloatPraser()) { dataRef in
-//            self.verticalLabel.text = CLLocationSpeed(dataRef).fpm.formattedSpeedFPM
-//        }
-
-
-
-//        let _ = connector.startRequesting(dref: "sim/flightmodel/position/indicated_airspeed", parser: FloatPraser()) { dataRef in
-//            self.speedAirLabel.text = Double(dataRef).formattedSpeedKnots
-//         }
-
-//        let _ = connector.startRequesting(dref: "sim/flightmodel/position/groundspeed", parser: FloatPraser()) { dataRef in
-//            self.speedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
-//        }
-
-        let _ = connector.startRequesting(dref: "sim/flightmodel/position/y_agl", parser: FloatParser()) { dataRef in
-            self.altAglLabel.text = Double(dataRef).feet.value.formattedAltitude
-        }
-        
-//        let _ = connector.startRequesting(dref: "sim/weather/wind_speed_kt", parser: FloatPraser()) { dataRef in
-//            self.windSpeedLabel.text = Double(dataRef).knots.value.formattedSpeedKnots
-//        }
-//
-//        let _ = connector.startRequesting(dref: "sim/weather/wind_direction_degt", parser: IntParser()) { dataRef in
-//            self.windDirectionLabel.text = "\(dataRef) °"
-//        }
-        
-        let _ = connector.startRequesting(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser()) { dataRef in
-            self.tailnumLabel.text = dataRef
-        }
-        
     }
 }
 
