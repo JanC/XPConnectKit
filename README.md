@@ -17,14 +17,14 @@
 
 ## Installation
 
-#### CocoaPods
+<!-- #### CocoaPods 
 You can use [CocoaPods](http://cocoapods.org/) to install `XPConnectKit ` by adding it to your `Podfile`:
 
 ```ruby
 platform :ios, '11.0'
 use_frameworks!
 pod 'XPConnectKit'
-```
+``` -->
 
 #### Carthage
 
@@ -33,9 +33,9 @@ Create a `Cartfile` that lists the framework and run `carthage update`. Follow t
 ```
 github "JanC/XPConnectKit"
 ```
-#### Manually
+<!-- #### Manually
 1. Download and drop ```XPConnectKit.swift``` in your project.  
-2. Congratulations!  
+2. Congratulations!   -->
 
 ## Usage example
 
