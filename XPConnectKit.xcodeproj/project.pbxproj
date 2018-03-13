@@ -21,7 +21,6 @@
 		8A60DBCE1FD60543003076B6 /* XPConnectKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAB2E681FD5FA1E009EBA2D /* XPConnectKit.framework */; };
 		8A60DBCF1FD60543003076B6 /* XPConnectKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAB2E681FD5FA1E009EBA2D /* XPConnectKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8A70C4482057AC52001F3F20 /* UnitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A70C4472057AC52001F3F20 /* UnitExtensions.swift */; };
-		8A84717F1FE66B2A00A917EE /* UnitKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8471801FE66B2A00A917EE /* UnitKit.framework */; };
 		8AAB2E6C1FD5FA1E009EBA2D /* XPConnectKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AAB2E6A1FD5FA1E009EBA2D /* XPConnectKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8AC09FC21FD697460064F93B /* Parsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC09FC11FD697460064F93B /* Parsers.swift */; };
 /* End PBXBuildFile section */
@@ -79,7 +78,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A84717F1FE66B2A00A917EE /* UnitKit.framework in Frameworks */,
 				8A60DBCE1FD60543003076B6 /* XPConnectKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
