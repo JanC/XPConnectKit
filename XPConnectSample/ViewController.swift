@@ -11,10 +11,10 @@ import XPConnectKit
 import CoreLocation
 
 class ViewController: UIViewController {
-
+    
     static let host = "192.168.1.121"
-//    static let host = "192.168.1.197"
-//    static let host = "192.168.0.5"
+    //    static let host = "192.168.1.197"
+    //    static let host = "192.168.0.5"
     
     let client = XPCClient(host: ViewController.host)
     let connector = XPLConnector(host: ViewController.host)
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let client = XPCClient(host: "192.168.1.1")
         do {
             // com1 is an Int
@@ -59,7 +59,7 @@ class ViewController: UIViewController {
         } catch {
             print("error: \(error)")
         }
-
+        
     }
     
     @IBAction func stopAction() {
@@ -79,12 +79,12 @@ class ViewController: UIViewController {
     }
     
     func startRequestingRadios() {
-    let radioDrefs = [
-        "sim/cockpit/radios/com1_freq_hz",
-        "sim/cockpit/radios/com1_stdby_freq_hz",
-        "sim/cockpit/radios/nav1_freq_hz",
-        "sim/cockpit/radios/nav1_stdby_freq_hz",
-        ]
+        let radioDrefs = [
+            "sim/cockpit/radios/com1_freq_hz",
+            "sim/cockpit/radios/com1_stdby_freq_hz",
+            "sim/cockpit/radios/nav1_freq_hz",
+            "sim/cockpit/radios/nav1_stdby_freq_hz",
+            ]
         
         let parser = IntParser()
         radioTimer = connector.startRequesting(drefs: radioDrefs) { (result) in
@@ -122,7 +122,7 @@ class ViewController: UIViewController {
             "sim/flightmodel/position/vh_ind",
             "sim/flightmodel/position/indicated_airspeed",
             "sim/flightmodel/position/groundspeed"
-            ]
+        ]
         
         let parser = FloatParser()
         speedTimer = connector.startRequesting(drefs: drefs) { (result) in
@@ -189,7 +189,6 @@ class ViewController: UIViewController {
             case .failure(let error):
                 self.handle(error: error)
             }
-
         }
     }
     
