@@ -21,6 +21,7 @@ public class XPLConnector: NSObject {
     let client: XPCClient
     
     var positionTimer: Timer?
+    // one timer per dref
     var drefTimers = [String: Timer]()
 
     // a queue that ensures that only 1 request at time is sent
@@ -37,7 +38,7 @@ public class XPLConnector: NSObject {
         synchronousQueue.maxConcurrentOperationCount = 1
     }
 
-    // MARK: - Get Data Refs
+    // MARK: - Get Single drefs
     
     /*
         Gets a single dataref. The request are queued to avoid getting drefs in a wrong order
@@ -79,8 +80,18 @@ public class XPLConnector: NSObject {
         return result
     }
     
-    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) -> Timer {
-        return Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
+    // MARK: - Start requesting
+    
+    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) {
+        
+        // only start for drefs that are not already requested
+        let filteredDrefs = drefs.filter({ drefTimers[$0] == nil })
+        if filteredDrefs.count == 0 {
+            return
+        }
+        print("Starting to request \(filteredDrefs.count) drefs")
+
+        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
 
             if self.backgroundQueue.operations.count >= 5 {
                 print("Skipping drefs request because one is already in progress. You might want to lower the update interval")
@@ -100,6 +111,11 @@ public class XPLConnector: NSObject {
                 }
             }
         })
+
+        // keep the reference of the timer for each dref
+        for dref in drefs {
+            drefTimers[dref] = timer
+        }
     }
 
     /*
@@ -120,22 +136,31 @@ public class XPLConnector: NSObject {
         drefTimers[dref] = timer
         return true
     }
+    
+    // MARK: - Stop requesting
 
-    /*
-        Stops updating the given dref
-        @param The data ref to stop
-        @return false if the dataref was not updating
+    /**
+     Stops updating the given dref.
+     - parameters:
+        - dref: The data used in startRequesting
+     - returns:
+        false if the dataref was not updating
+     - important:
+        This method has no effect of you started polling using a list of drefs `startRequesting(drefs:`
     */
     public func stopRequesting(dref: String) {
         if let timer = drefTimers[dref] {
-            timer.invalidate()
-            drefTimers[dref] = nil
+            if timer.isValid {
+                timer.invalidate()
+            }
+            drefTimers.removeValue(forKey: dref)
         }
     }
     public func stopRequestingDataRefs() {
         for (dref, _) in drefTimers {
             stopRequesting(dref: dref)
         }
+        print("Stopped requesting drefs. Timers \(drefTimers.count)")
     }
     
     // MARK: - Send Data Ref

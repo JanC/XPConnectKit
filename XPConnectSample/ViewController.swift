@@ -37,12 +37,6 @@ class ViewController: UIViewController {
     @IBOutlet var windSpeedLabel: UILabel!
     @IBOutlet var windDirectionLabel: UILabel!
     
-    var radioTimer: Timer?
-    var speedTimer: Timer?
-    var weatherTimer : Timer?
-    var altTimer: Timer?
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,11 +59,6 @@ class ViewController: UIViewController {
     @IBAction func stopAction() {
         connector.stopRequestingDataRefs()
         
-        stopRequestingSpeed()
-        stopRequestingRadios()
-        stopRequestingWeather()
-        stopRequestingAlt()
-        
     }
     @IBAction func startAction() {
         startRequestingSpeed()
@@ -87,7 +76,7 @@ class ViewController: UIViewController {
             ]
         
         let parser = IntParser()
-        radioTimer = connector.startRequesting(drefs: radioDrefs) { (result) in
+        connector.startRequesting(drefs: radioDrefs) { (result) in
             switch result {
             case .success(let values):
                 do {
@@ -112,11 +101,6 @@ class ViewController: UIViewController {
         }
     }
     
-    func stopRequestingRadios() {
-        radioTimer?.invalidate()
-        radioTimer = nil
-    }
-    
     func startRequestingSpeed() {
         let drefs = [
             "sim/flightmodel/position/vh_ind",
@@ -125,7 +109,7 @@ class ViewController: UIViewController {
         ]
         
         let parser = FloatParser()
-        speedTimer = connector.startRequesting(drefs: drefs) { (result) in
+        connector.startRequesting(drefs: drefs) { (result) in
             
             switch result {
             case .success(let values):
@@ -154,13 +138,13 @@ class ViewController: UIViewController {
         print("Error: \(error)")
         if case XPError.network = error {
             // stop polling here
+//            self.stop
+//            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
+//                self.startAction()
+//            })
         }
     }
     
-    func stopRequestingSpeed() {
-        speedTimer?.invalidate()
-        speedTimer = nil
-    }
     
     func startRequestingWeather() {
         let drefs = [
@@ -169,7 +153,7 @@ class ViewController: UIViewController {
         ]
         
         let parser = FloatParser()
-        weatherTimer = connector.startRequesting(drefs: drefs) { (result) in
+        connector.startRequesting(drefs: drefs) { (result) in
             
             switch result {
             case .success(let values):
@@ -192,11 +176,6 @@ class ViewController: UIViewController {
         }
     }
     
-    func stopRequestingWeather() {
-        weatherTimer?.invalidate()
-        weatherTimer = nil
-    }
-    
     func startRequestingAlt() {
         let drefs = [
             "sim/flightmodel/position/elevation",
@@ -204,7 +183,7 @@ class ViewController: UIViewController {
         ]
         
         let parser = FloatParser()
-        altTimer = connector.startRequesting(drefs: drefs) { (result) in
+        connector.startRequesting(drefs: drefs) { (result) in
             
             switch result {
             case .success(let values):
@@ -225,11 +204,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    func stopRequestingAlt() {
-        altTimer?.invalidate()
-        altTimer = nil
-    }
+
 }
 
 

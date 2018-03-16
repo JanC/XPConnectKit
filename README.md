@@ -69,7 +69,6 @@ do {
 ```
 
 ### Polling multiple DREF
-Work in progress
 
 You can use the `XPLConnector` to poll regurarly for a set of data refs. The closure with the result values will be called regurarly and result is a two dimentional array of Floats. You can use again a `Parser` to get the expected value:
 
@@ -84,7 +83,7 @@ let radioDrefs = [
     ]
 
 let parser = IntParser()
-radioTimer = connector.startRequesting(drefs: radioDrefs) { (values) in
+connector.startRequesting(drefs: radioDrefs) { (values) in
     do {
         var index = 0
         self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
@@ -102,6 +101,13 @@ radioTimer = connector.startRequesting(drefs: radioDrefs) { (values) in
         print("Could not parse dref: \(error)")
     }
 }
+
+```
+
+To stop polling all currently requested drefs, call:
+
+```swift
+connector.stopRequestingDataRefs()
 ```
 
 
