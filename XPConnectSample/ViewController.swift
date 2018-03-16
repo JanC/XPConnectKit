@@ -138,10 +138,10 @@ class ViewController: UIViewController {
         print("Error: \(error)")
         if case XPError.network = error {
             // stop polling here
-//            self.stop
-//            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
-//                self.startAction()
-//            })
+            self.connector.stopRequestingDataRefs()
+            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
+                self.startAction()
+            })
         }
     }
     
