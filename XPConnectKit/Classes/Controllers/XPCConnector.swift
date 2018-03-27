@@ -82,18 +82,18 @@ public class XPLConnector: NSObject {
     
     // MARK: - Start requesting
     
-    public func startRequesting(drefs: [String], interval: TimeInterval = 0.5, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) {
+    public func startRequesting(drefs: [String], interval: TimeInterval = 1, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) {
         
         // only start for drefs that are not already requested
         let filteredDrefs = drefs.filter({ drefTimers[$0] == nil })
         if filteredDrefs.count == 0 {
             return
         }
-        print("Starting to request \(filteredDrefs.count) drefs")
+        print("Starting to request \(filteredDrefs.count) drefs every \(interval)s")
 
         let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
 
-            if self.backgroundQueue.operations.count >= 5 {
+            if self.backgroundQueue.operations.count > 1 {
                 print("Skipping drefs request because one is already in progress. You might want to lower the update interval")
                 return
             }

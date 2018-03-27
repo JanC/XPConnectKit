@@ -225,7 +225,7 @@ int readUDP(XPCSocket sock, char buffer[], int len)
 #endif
 	if (status < 0)
 	{
-		printError("readUDP", "Error reading socket");
+		// printError("readUDP", "Error reading socket");
 	}
 	return status;
 }
@@ -468,7 +468,7 @@ int getDREFResponse(XPCSocket sock, float* values[], unsigned char count, int si
 #ifdef _WIN32
         printError("getDREFs", "Read operation failed. (%d)", WSAGetLastError());
 #else
-        printError("getDREFs", "Read operation failed.");
+        //printError("getDREFs", "Read operation failed.");
 #endif
         return -1;
     }
