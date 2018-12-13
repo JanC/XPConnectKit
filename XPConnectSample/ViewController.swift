@@ -8,6 +8,7 @@
 
 import UIKit
 import XPConnectKit
+import XPDiscoveryKit
 import CoreLocation
 
 class ViewController: UIViewController {
@@ -18,6 +19,8 @@ class ViewController: UIViewController {
     
     let client = XPCClient(host: ViewController.host)
     let connector = XPLConnector(host: ViewController.host)
+    
+    lazy var discovery = XPDiscovery()
     
     @IBOutlet var connectionLabel: UILabel!
     @IBOutlet var speedLabel: UILabel!
@@ -39,6 +42,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        discovery.delegate = self
+        try? discovery.start()
         
         let connector = XPLConnector(host: "192.168.1.1")
         
@@ -204,7 +210,12 @@ class ViewController: UIViewController {
             }
         }
     }
+}
 
+extension ViewController: XPDiscoveryDelegate {
+    func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode) {
+        print("Discovered XPlane: \(node.hostName) - \(node.beacon.versionNumber)")
+    }
 }
 
 

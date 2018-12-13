@@ -111,6 +111,31 @@ connector.stopRequestingDataRefs()
 ```
 
 
+### XPDiscovery
+
+The `XPConnector` contains another module `XPDiscoveryKit` which is used to discover X-Plane instances running on a local network. This module does not use the XPlaneConnect api but uses directly the X-Plane UDP API to listen to the `BCN` UDP packet that X-Plane emmits (see "Sending Data to X-Plane.rtfd" in the X-Plane folder for the protocol specification)
+
+#### Installation
+
+Once you build the Carthage modules, you need to import `XPDiscoveryKit.framework` as well as its dependency `CocoaAsyncSocket.framework` in your project.
+
+
+#### Usage
+
+```swift
+let discovery = XPDiscovery()
+discovery.delegate = self
+
+// start the discovery
+try? discovery.start()
+
+// MARK: - XPDiscoveryDelegate
+
+func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode) {
+    print("Discovered X-Plane runing on hostname \(node.hostName) address \(node.address)")
+}
+```
+
 
 ## Contribute
 
