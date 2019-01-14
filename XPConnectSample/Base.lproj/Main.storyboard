@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="13d-J0-kWr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="13d-J0-kWr">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -243,11 +243,32 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="xxn-Ah-w1j">
                                         <rect key="frame" x="0.0" y="230" width="375" height="100"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="UET-8W-9LW">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vMt-Fw-fTF">
+                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="100"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vertical Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBv-PC-5Lg">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vertical Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rr9-Zg-1xl">
+                                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="20"/>
+                                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="20" id="TQk-2G-Gbf"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-0000 fpm" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j7V-S9-a1y">
+                                                        <rect key="frame" x="0.0" y="20" width="187.5" height="80"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="UET-8W-9LW">
+                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="100"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Heading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBv-PC-5Lg">
+                                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="20"/>
                                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="gJ2-ZL-hsb"/>
@@ -256,8 +277,8 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-0000 fpm" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ck-AA-zyw">
-                                                        <rect key="frame" x="0.0" y="20" width="375" height="80"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="360" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ck-AA-zyw">
+                                                        <rect key="frame" x="0.0" y="20" width="187.5" height="80"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -297,12 +318,13 @@
                         <outlet property="altLabel" destination="rmE-gv-oZG" id="34E-iy-Hap"/>
                         <outlet property="com1Label" destination="Phq-bh-fRu" id="hd2-Jk-aR9"/>
                         <outlet property="com1LabelStby" destination="vq2-Lj-UcV" id="3sd-Vj-lAV"/>
+                        <outlet property="hdgLabel" destination="3Ck-AA-zyw" id="c9p-v1-CJM"/>
                         <outlet property="nav1Label" destination="pCa-vX-y6w" id="WNL-Pt-uT5"/>
                         <outlet property="nav1LabelStby" destination="o7A-e4-JNP" id="Uil-Db-BoS"/>
                         <outlet property="speedAirLabel" destination="vC0-BI-CKm" id="oWI-im-hOe"/>
                         <outlet property="speedLabel" destination="rdP-4T-7Xo" id="DGw-Ya-BDL"/>
                         <outlet property="tailnumLabel" destination="31o-ot-shy" id="GPp-XR-FrX"/>
-                        <outlet property="verticalLabel" destination="3Ck-AA-zyw" id="LoU-I0-pkb"/>
+                        <outlet property="verticalLabel" destination="j7V-S9-a1y" id="iva-yK-smr"/>
                         <outlet property="windDirectionLabel" destination="nsj-nX-3ZH" id="6xJ-zm-De4"/>
                         <outlet property="windSpeedLabel" destination="6q0-aw-Ipj" id="lDC-E9-nrS"/>
                     </connections>

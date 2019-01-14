@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     //    static let host = "192.168.0.5"
     
     let client = XPCClient(host: ViewController.host)
-    let connector = XPLConnector(host: ViewController.host)
+    var connector: XPLConnector?
     
     lazy var discovery = XPDiscovery()
     
@@ -28,6 +28,7 @@ class ViewController: UIViewController {
     @IBOutlet var verticalLabel: UILabel!
     @IBOutlet var altLabel: UILabel!
     @IBOutlet var altAglLabel: UILabel!
+    @IBOutlet var hdgLabel: UILabel!
     
     @IBOutlet var com1Label: UILabel!
     @IBOutlet var com1LabelStby: UILabel!
@@ -40,11 +41,14 @@ class ViewController: UIViewController {
     @IBOutlet var windSpeedLabel: UILabel!
     @IBOutlet var windDirectionLabel: UILabel!
     
+    var host: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         discovery.delegate = self
         try? discovery.start()
+        
         
         let connector = XPLConnector(host: "192.168.1.1")
         
@@ -63,116 +67,84 @@ class ViewController: UIViewController {
     }
     
     @IBAction func stopAction() {
-        connector.stopRequestingDataRefs()
+        connector?.stopRequestingDataRefs()
         
     }
     @IBAction func startAction() {
-        startRequestingSpeed()
-        startRequestingRadios()
-        startRequestingWeather()
-        startRequestingAlt()
+        
+        print("Connecting to \(host ?? ViewController.host)")
+        connector = XPLConnector(host: host ?? ViewController.host)
+        
+        startRequestingDataRefs()
+
     }
     
-    func startRequestingRadios() {
+    func startRequestingDataRefs() {
         let radioDrefs = [
             "sim/cockpit/radios/com1_freq_hz",
             "sim/cockpit/radios/com1_stdby_freq_hz",
             "sim/cockpit/radios/nav1_freq_hz",
             "sim/cockpit/radios/nav1_stdby_freq_hz",
-            ]
-        
-        let parser = IntParser()
-        connector.startRequesting(drefs: radioDrefs) { (result) in
-            switch result {
-            case .success(let values):
-                do {
-                    var index = 0
-                    self.com1Label.text = try parser.parse(values: values[index]).formattedFrequency
-                    index += 1
-                    
-                    self.com1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-                    index += 1
-                    
-                    self.nav1Label.text = try parser.parse(values: values[index]).formattedFrequency
-                    index += 1
-                    
-                    self.nav1LabelStby.text = try parser.parse(values: values[index]).formattedFrequency
-                    index += 1
-                } catch {
-                    print("Could not parse dref: \(error)")
-                }
-            case .failure(let error):
-                self.handle(error: error)
-            }
-        }
-    }
-    
-    func startRequestingSpeed() {
-        let drefs = [
+            
             "sim/flightmodel/position/vh_ind",
             "sim/flightmodel/position/indicated_airspeed",
-            "sim/flightmodel/position/groundspeed"
-        ]
-        
-        let parser = FloatParser()
-        connector.startRequesting(drefs: drefs) { (result) in
+            "sim/flightmodel/position/groundspeed",
             
-            switch result {
-            case .success(let values):
-                do {
-                    var index = 0
-                    self.verticalLabel.text = try CLLocationSpeed(parser.parse(values: values[index])).fpm.formattedSpeedFPM
-                    
-                    index += 1
-                    
-                    self.speedAirLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
-                    index += 1
-                    
-                    self.speedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
-                    index += 1
-                    
-                } catch {
-                    print("Could not parse dref: \(error)")
-                }
-            case .failure(let error):
-                self.handle(error: error)
-            }
-        }
-    }
-    
-    func handle(error: Error) {
-        print("Error: \(error)")
-        if case XPError.network = error {
-            // stop polling here
-            self.connector.stopRequestingDataRefs()
-            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
-                self.startAction()
-            })
-        }
-    }
-    
-    
-    func startRequestingWeather() {
-        let drefs = [
             "sim/weather/wind_speed_kt",
-            "sim/weather/wind_direction_degt"
-        ]
-        
-        let parser = FloatParser()
-        connector.startRequesting(drefs: drefs) { (result) in
+            "sim/weather/wind_direction_degt",
             
+            // Alt
+            "sim/flightmodel/position/elevation",
+            "sim/flightmodel/position/y_agl",
+            "sim/flightmodel/position/mag_psi"
+            ]
+        
+        let intParser = IntParser()
+        let floatParser = FloatParser()
+        connector?.startRequesting(drefs: radioDrefs) { (result) in
             switch result {
             case .success(let values):
                 do {
                     var index = 0
-                    self.windSpeedLabel.text = try Double(parser.parse(values: values[index])).formattedSpeedKnots
+                    self.com1Label.text = try intParser.parse(values: values[index]).formattedFrequency
+                    index += 1
                     
+                    self.com1LabelStby.text = try intParser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.nav1Label.text = try intParser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.nav1LabelStby.text = try intParser.parse(values: values[index]).formattedFrequency
+                    index += 1
+                    
+                    self.verticalLabel.text = try CLLocationSpeed(floatParser.parse(values: values[index])).fpm.formattedSpeedFPM
+                    index += 1
+                    
+                    self.speedAirLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
+                    index += 1
+                    
+                    self.speedLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
+                    index += 1
+                    
+                    self.windSpeedLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
                     index += 1
                     
                     let direction = try IntParser().parse(values: values[index])
                     self.windDirectionLabel.text = "\(direction)°"
                     index += 1
                     
+                    // ALT
+                    self.altLabel.text = try Double(floatParser.parse(values: values[index])).feet.value.formattedAltitude
+                    index += 1
+                    
+                    self.altAglLabel.text = try Double(floatParser.parse(values: values[index])).feet.value.formattedAltitude
+                    index += 1
+                    
+                    let heading  = try Double(floatParser.parse(values: values[index])).formattedHeading
+                    self.hdgLabel.text = heading
+                    index += 1
+                    
                 } catch {
                     print("Could not parse dref: \(error)")
                 }
@@ -182,32 +154,16 @@ class ViewController: UIViewController {
         }
     }
     
-    func startRequestingAlt() {
-        let drefs = [
-            "sim/flightmodel/position/elevation",
-            "sim/flightmodel/position/y_agl"
-        ]
-        
-        let parser = FloatParser()
-        connector.startRequesting(drefs: drefs) { (result) in
-            
-            switch result {
-            case .success(let values):
-                do {
-                    var index = 0
-                    
-                    self.altLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
-                    index += 1
-                    
-                    self.altAglLabel.text = try Double(parser.parse(values: values[index])).feet.value.formattedAltitude
-                    index += 1
-                    
-                } catch {
-                    print("Could not parse dref: \(error)")
-                }
-            case .failure(let error):
-                self.handle(error: error)
-            }
+
+    
+    func handle(error: Error) {
+        print("Error: \(error)")
+        if case XPError.network = error {
+            // stop polling here
+            self.connector?.stopRequestingDataRefs()
+            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
+                self.startAction()
+            })
         }
     }
 }
@@ -215,6 +171,7 @@ class ViewController: UIViewController {
 extension ViewController: XPDiscoveryDelegate {
     func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode) {
         print("Discovered XPlane: \(node.hostName) - \(node.beacon.versionNumber)")
+        host = node.address
     }
 }
 
