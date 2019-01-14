@@ -94,7 +94,7 @@ public class XPLConnector: NSObject {
         let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
 
             if self.backgroundQueue.operations.count > 1 {
-                print("Skipping drefs request because one is already in progress. You might want to lower the update interval")
+                print("Skipping drefs request because \(self.backgroundQueue.operations.count) are already in progress. You might want to lower the update interval")
                 return
             }
             
