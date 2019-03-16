@@ -24,6 +24,7 @@ struct XPLDecoder {
     static let commandLength = 5
     
     static func command(response: Data) -> XPLCommandType {
+        // todo crash if packent is corruped e.g. 'BEC'
         let commandData = response.subdata(in: 0..<commandLength)
         
         guard let commandString = commandData.withUnsafeBytes({ (pointer: UnsafePointer<CChar>) -> String? in
@@ -45,14 +46,8 @@ struct XPLDecoder {
         let rawData = response.subdata(in: commandLength..<response.count)
         
         switch commandType {
-        case .rpos:
-            print(XPLCommandType.rpos.rawValue + "not implemented")
-            return .unknown("")
         case .becn:
             return .becn(XPLBeacon(data: rawData))
-        case .rref:
-            print(XPLCommandType.rref.rawValue + "not implemented")
-            return .unknown("")
         default:
             return .unknown("")
         }

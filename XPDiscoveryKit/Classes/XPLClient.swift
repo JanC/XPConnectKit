@@ -21,6 +21,11 @@ protocol XPLClientDelegate: AnyObject {
 
 public class XPLClient: NSObject {
 
+    enum Constants {
+        static let multicastPort: UInt16 = 49710
+        static let multicastAddress: String = "239.255.1.1"
+    }
+
     weak var delegate: XPLClientDelegate?
     var socket: GCDAsyncUdpSocket?
     let queue = DispatchQueue(label: "net.tequilaapps.socket")
@@ -31,25 +36,12 @@ public class XPLClient: NSObject {
 
     // MARK: - Public
     func setup() throws {
-        
       
         let socket = GCDAsyncUdpSocket(delegate: self, delegateQueue: queue, socketQueue: queue)
         self.socket = socket
-        do {
-            
-            try socket.bind(toPort: 49707)
-            try socket.joinMulticastGroup("239.255.1.1")
-        } catch {
-            print("Failed to bind \(error)")
-            throw XPLClientError.failedToBind
-        }
-
-        do {
-            try socket.beginReceiving()
-        } catch {
-            print("Failed to receive \(error)")
-            throw XPLClientError.failedToReceive
-        }
+        try socket.bind(toPort: Constants.multicastPort)
+        try socket.joinMulticastGroup(Constants.multicastAddress)
+        try socket.beginReceiving()
         print("XPLClient started")
     }
     
@@ -58,7 +50,7 @@ public class XPLClient: NSObject {
     deinit {
         print("Client deinit")
         guard let socket = socket else { return }
-        try? socket.leaveMulticastGroup("239.255.1.1")
+        try? socket.leaveMulticastGroup(Constants.multicastAddress)
         socket.close()
     }
 }

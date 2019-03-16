@@ -17,12 +17,6 @@ public struct XPLNode {
             return beacon.port
         }
     }
-    public var hostName: String {
-        get {
-            return beacon.computerName
-        }
-    }
-    
     public let beacon: XPLBeacon
     
     init(address: String, beacon: XPLBeacon) {

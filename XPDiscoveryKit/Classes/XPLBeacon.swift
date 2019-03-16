@@ -9,14 +9,20 @@
 import Foundation
 
 public struct XPLBeacon {
-    public let versionNumber: UInt32
+
+    // XPlaneConnect server port e.g. '49009'
     public let port: ushort
-    public let computerName: String
-    
-    let majorVersion: UInt8
-    let minorVersion: UInt8
-    let applicationHostId: UInt32
-    let role: UInt32
+
+    // X-Plane version e.g. '11260
+    private let xplaneVersionCode: UInt32
+
+    // XPlaneConnect plugin version e.g. '1.3-rc.1'
+    public let xplaneConnectVersion: String
+
+    public var xplaneVersion: String {
+
+        return String(format: "%.2f", Double(xplaneVersionCode) / 100.0)
+    }
 
 }
 
@@ -24,26 +30,13 @@ extension XPLBeacon: Decodable {
     
     init(data: Data) {
         var offset = 0
-        majorVersion = data.object(at: offset)
-        offset = offset + MemoryLayout.size(ofValue: majorVersion)
-        
-        minorVersion = data.object(at: offset)
-        offset = offset + MemoryLayout.size(ofValue: minorVersion)
-        
-        applicationHostId = data.object(at: offset)
-        offset = offset + MemoryLayout.size(ofValue: applicationHostId)
-        
-        versionNumber = data.object(at: offset)
-        offset = offset + MemoryLayout.size(ofValue: versionNumber)
-        
-        role = data.object(at: offset)
-        offset = offset + MemoryLayout.size(ofValue: role)
-        
         port = data.object(at: offset)
         offset = offset + MemoryLayout.size(ofValue: port)
         
+        xplaneVersionCode = data.object(at: offset)
+        offset = offset + MemoryLayout.size(ofValue: xplaneVersionCode)
         
-        computerName = data.subdata(in: offset..<data.count).withUnsafeBytes { (pointer: UnsafePointer<CChar>) -> String in
+        xplaneConnectVersion = data.subdata(in: offset..<data.count).withUnsafeBytes { (pointer: UnsafePointer<CChar>) -> String in
             return String(cString: pointer)
         }
     }

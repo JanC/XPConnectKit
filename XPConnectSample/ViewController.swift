@@ -47,23 +47,26 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         discovery.delegate = self
-        try? discovery.start()
-        
-        
-        let connector = XPLConnector(host: "192.168.1.1")
-        
         do {
-            // com1 is an Int
-            let com1 = try connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
-            print("com1: \(com1)")
-            
-            // result is a String
-            let tailnum = try connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
-            print("tailnum: \(tailnum)")
-            
+            try discovery.start()
         } catch {
-            print("error: \(error)")
+            showAlert(title: "Could not start discovery", message: error.localizedDescription)
         }
+
+//        let connector = XPLConnector(host: "192.168.1.1")
+//
+//        do {
+//            // com1 is an Int
+//            let com1 = try connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
+//            print("com1: \(com1)")
+//
+//            // result is a String
+//            let tailnum = try connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
+//            print("tailnum: \(tailnum)")
+//            
+//        } catch {
+//            print("error: \(error)")
+//        }
     }
     
     @IBAction func stopAction() {
@@ -169,7 +172,11 @@ class ViewController: UIViewController {
 
 extension ViewController: XPDiscoveryDelegate {
     func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode) {
-        print("Discovered XPlane: \(node.hostName) - \(node.beacon.versionNumber)")
         host = node.address
+        let message = "Discovered XPlane version \(node.beacon.xplaneVersion) - \(node.beacon.xplaneConnectVersion): \(node.address):\(node.port)"
+        print(message)
+
+        showAlert(title: "Discovered X-Plane Connect", message: message)
+        //askYesNo(title: "Discovered X-Plane Connect ", question: <#T##String#>, yesAction: <#T##(() -> Void)##(() -> Void)##() -> Void#>)
     }
 }

@@ -14,8 +14,6 @@ enum XPLCommand {
 }
 
 enum XPLCommandType: String {
-    case rpos = "RPOS4"
     case becn = "BECN"
-    case rref = "RREF," // yes the RREF contains a ,
     case unknown
 }
