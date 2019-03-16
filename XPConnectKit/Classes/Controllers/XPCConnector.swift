@@ -98,7 +98,7 @@ public class XPLConnector: NSObject {
                 return
             }
             
-            self.backgroundQueue.addOperation() {
+            self.backgroundQueue.addOperation {
                 do {
                     let result = try self.get(drefs: drefs)
                     callbackQueue.addOperation {
@@ -121,14 +121,14 @@ public class XPLConnector: NSObject {
     /*
         Starts updating the give data ref and calls the callback regularly with the result value
     */
-    public func startRequesting<P: Parser>(dref: String, parser: P, interval: TimeInterval = 1 , completionHandler: @escaping (P.T) -> Void) -> Bool {
+    public func startRequesting<P: Parser>(dref: String, parser: P, interval: TimeInterval = 1, completionHandler: @escaping (P.T) -> Void) -> Bool {
         
         if drefTimers[dref] != nil {
             // already updating
             return false
         }
         
-        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { (_) in
+        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
             if let result = try? self.get(dref: dref, parser: parser) {
                 completionHandler(result)
             }
@@ -181,7 +181,7 @@ public class XPLConnector: NSObject {
             return
         }
 
-        positionTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+        positionTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             if let position = try? self.client.getPosition() {
                 print("position: \(position)")
                 completionHandler(position)

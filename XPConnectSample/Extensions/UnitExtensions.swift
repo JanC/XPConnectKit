@@ -7,8 +7,8 @@
 //
 
 
-import Foundation
 import CoreLocation
+import Foundation
 
 
 public extension CLLocationSpeed {
@@ -26,7 +26,7 @@ public extension CLLocationSpeed {
     public var fpm: Double {
         var measurement = Measurement(value: self, unit: UnitLength.meters)
         measurement.convert(to: UnitLength.feet)
-        let fpm =  measurement.value * 60
+        let fpm = measurement.value * 60
         return fpm
     }
 }
@@ -77,7 +77,7 @@ public extension Int {
 
 public extension Double {
     
-    static let formatter: NumberFormatter =  {
+    static let formatter: NumberFormatter = {
         let f = NumberFormatter()
         f.maximumFractionDigits = 0
         f.minimumFractionDigits = 0
@@ -85,7 +85,7 @@ public extension Double {
         return f
     }()
     
-    static let decimalFormatter: NumberFormatter =  {
+    static let decimalFormatter: NumberFormatter = {
         let f = NumberFormatter()
         f.maximumFractionDigits = 2
         f.minimumFractionDigits = 2
@@ -136,5 +136,3 @@ public extension Double {
         return  measurement.value
     }
 }
-
-

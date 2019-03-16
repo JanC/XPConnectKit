@@ -6,15 +6,15 @@
 //  Copyright © 2017 TequilaApps. All rights reserved.
 //
 
-import Foundation
 import CocoaAsyncSocket
+import Foundation
 
 enum XPLClientError: Error {
     case failedToBind
     case failedToReceive
 }
 
-protocol XPLClientDelegate: class {
+protocol XPLClientDelegate: AnyObject {
 
     func client(_ client: XPLClient, didFindBeacon beacon: XPLBeacon, atAddress address: String)
 }
@@ -24,14 +24,12 @@ public class XPLClient: NSObject {
     weak var delegate: XPLClientDelegate?
     var socket: GCDAsyncUdpSocket?
     let queue = DispatchQueue(label: "net.tequilaapps.socket")
-    
-    
 
     override init() {
         super.init()
     }
 
-    //MARK: - Public
+    // MARK: - Public
     func setup() throws {
         
       
@@ -65,7 +63,7 @@ public class XPLClient: NSObject {
     }
 }
 
-//MARK: - GCDAsyncUdpSocketDelegate
+// MARK: - GCDAsyncUdpSocketDelegate
 
 extension XPLClient: GCDAsyncUdpSocketDelegate {
 
@@ -80,7 +78,7 @@ extension XPLClient: GCDAsyncUdpSocketDelegate {
     public func udpSocket(_ sock: GCDAsyncUdpSocket, didNotSendDataWithTag tag: Int, dueToError error: Error?) { }
 
     public func udpSocket(_ sock: GCDAsyncUdpSocket, didReceive data: Data, fromAddress address: Data, withFilterContext filterContext: Any?) {
-        let command =  XPLDecoder.decode(response: data)
+        let command = XPLDecoder.decode(response: data)
         
         guard let address = GCDAsyncUdpSocket.host(fromAddress: address) else {
                 print("Could not get address")

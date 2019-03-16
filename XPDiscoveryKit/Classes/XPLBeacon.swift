@@ -25,7 +25,7 @@ extension XPLBeacon: Decodable {
     init(data: Data) {
         var offset = 0
         majorVersion = data.object(at: offset)
-        offset = offset +  MemoryLayout.size(ofValue: majorVersion)
+        offset = offset + MemoryLayout.size(ofValue: majorVersion)
         
         minorVersion = data.object(at: offset)
         offset = offset + MemoryLayout.size(ofValue: minorVersion)
@@ -43,7 +43,7 @@ extension XPLBeacon: Decodable {
         offset = offset + MemoryLayout.size(ofValue: port)
         
         
-        computerName = data.subdata(in: offset..<data.count).withUnsafeBytes() { (pointer: UnsafePointer<CChar>) -> String in
+        computerName = data.subdata(in: offset..<data.count).withUnsafeBytes { (pointer: UnsafePointer<CChar>) -> String in
             return String(cString: pointer)
         }
     }

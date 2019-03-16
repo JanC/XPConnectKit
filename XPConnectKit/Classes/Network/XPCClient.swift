@@ -1,4 +1,3 @@
-
 //
 //  XPPlaneConnect.swift
 //  XPConnectKit
@@ -36,7 +35,7 @@ public class XPCClient {
         }
         let result = Array(UnsafeBufferPointer(start: values, count: Int(size)))
         
-        return XPCPosition(aircraftId: aircraftId,values: result)!
+        return XPCPosition(aircraftId: aircraftId, values: result)!
         
     }
     
@@ -97,7 +96,7 @@ public class XPCClient {
 //            cDrefs.append(cDref)
 //        }
         
-        var cargs = drefs.map {  UnsafePointer<Int8>(strdup($0)) }
+        var cargs = drefs.map { UnsafePointer<Int8>(strdup($0)) }
     
         if(getDREFs(socket, &cargs, &valuesArray, UInt8(drefs.count), sizesArray) < 0) {
             throw XPError.network

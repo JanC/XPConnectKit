@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol XPDiscoveryDelegate: class {
+public protocol XPDiscoveryDelegate: AnyObject {
     func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode)
 }
 public class XPDiscovery: NSObject {
@@ -23,7 +23,7 @@ public class XPDiscovery: NSObject {
     let client = XPLClient()
     var discoveredBeacons = [String: XPLNode]()
     
-    //MARK: - Public Methods
+    // MARK: - Public Methods
     
     public override init() {
         super.init()

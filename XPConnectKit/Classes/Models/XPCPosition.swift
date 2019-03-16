@@ -6,8 +6,8 @@
 //  Copyright © 2017 TequilaApps. All rights reserved.
 //
 
-import Foundation
 import CoreLocation
+import Foundation
 
 public struct XPCPosition {
     
@@ -20,7 +20,7 @@ public struct XPCPosition {
         case heading = 5
         case gear = 6
         
-        static var count: Int { return Indexes.gear.rawValue + 1}
+        static var count: Int { return Indexes.gear.rawValue + 1 }
     }
     
     let aircraftId: Int
@@ -45,4 +45,3 @@ public struct XPCPosition {
     
     }
 }
-

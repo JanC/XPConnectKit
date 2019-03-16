@@ -63,11 +63,11 @@ struct XPLDecoder {
 
 extension Data {
     func scanValue<T>(start: Int, length: Int) -> T {
-        return self.subdata(in: start..<start+length).withUnsafeBytes { $0.pointee }
+        return self.subdata(in: start..<start + length).withUnsafeBytes { $0.pointee }
     }
     
     func object<T>(at index: Int) -> T {
-        return self[index..<index+MemoryLayout<T>.size].withUnsafeBytes { $0.pointee }
+        return self[index..<index + MemoryLayout<T>.size].withUnsafeBytes { $0.pointee }
     }
     
     func hexEncodedString() -> String {

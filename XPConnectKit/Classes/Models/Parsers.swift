@@ -77,7 +77,7 @@ public struct StringParser: Parser {
     }
     
     public func parse(values: [Float]) throws -> String {
-        let chars = try values.map { (float) -> CChar in
+        let chars = try values.map { float -> CChar in
             
             let int = Int(float)
             if (int > Int8.max || int < Int8.min) {

@@ -6,10 +6,10 @@
 //  Copyright © 2017 TequilaApps. All rights reserved.
 //
 
+import CoreLocation
 import UIKit
 import XPConnectKit
 import XPDiscoveryKit
-import CoreLocation
 
 class ViewController: UIViewController {
     
@@ -97,11 +97,11 @@ class ViewController: UIViewController {
             "sim/flightmodel/position/elevation",
             "sim/flightmodel/position/y_agl",
             "sim/flightmodel/position/mag_psi"
-            ]
+        ]
         
         let intParser = IntParser()
         let floatParser = FloatParser()
-        connector?.startRequesting(drefs: radioDrefs) { (result) in
+        connector?.startRequesting(drefs: radioDrefs) { result in
             switch result {
             case .success(let values):
                 do {
@@ -141,7 +141,7 @@ class ViewController: UIViewController {
                     self.altAglLabel.text = try Double(floatParser.parse(values: values[index])).feet.value.formattedAltitude
                     index += 1
                     
-                    let heading  = try Double(floatParser.parse(values: values[index])).formattedHeading
+                    let heading = try Double(floatParser.parse(values: values[index])).formattedHeading
                     self.hdgLabel.text = heading
                     index += 1
                     
@@ -154,7 +154,6 @@ class ViewController: UIViewController {
         }
     }
     
-
     
     func handle(error: Error) {
         print("Error: \(error)")
@@ -174,5 +173,3 @@ extension ViewController: XPDiscoveryDelegate {
         host = node.address
     }
 }
-
-

@@ -19,7 +19,7 @@ extension UIViewController {
         }
     }
 
-    func askYesNo(title: String, question: String, yesAction: @escaping (() -> ()), noAction: (() -> ())? = nil) {
+    func askYesNo(title: String, question: String, yesAction: @escaping (() -> Void), noAction: (() -> Void)? = nil) {
         let controller = UIAlertController(title: title, message: question, preferredStyle: .alert)
         
         controller.addAction(UIAlertAction(title: "Ok", style: .default) { action in
