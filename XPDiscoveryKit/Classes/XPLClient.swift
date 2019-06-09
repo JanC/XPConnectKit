@@ -42,7 +42,6 @@ public class XPLClient: NSObject {
         try socket.bind(toPort: Constants.multicastPort)
         try socket.joinMulticastGroup(Constants.multicastAddress)
         try socket.beginReceiving()
-        print("XPLClient started")
     }
     
     // MARK: - Private

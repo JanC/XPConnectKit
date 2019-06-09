@@ -133,6 +133,10 @@ try? discovery.start()
 func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode) {
     print("Discovered XPlane version \(node.beacon.xplaneVersion) - \(node.beacon.xplaneConnectVersion): \(node.address):\(node.port)")
 }
+
+func discovery(_ dicovery: XPDiscovery, didLostNode node: XPLNode) {
+	print("Connection lost. No beacon received from \(node.address) after \(discovery.timeout)s")
+}
 ```
 
 
