@@ -84,7 +84,7 @@ class ViewController: UIViewController {
         
         let intParser = IntParser()
         let floatParser = FloatParser()
-        connector?.startRequesting(drefs: radioDrefs, interval: 0.5) { result in
+        connector?.startRequesting(drefs: radioDrefs, interval: 0.3) { result in
             switch result {
             case .success(let values):
                 do {
@@ -107,7 +107,7 @@ class ViewController: UIViewController {
                     self.speedAirLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
                     index += 1
                     
-                    self.speedLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
+                    self.speedLabel.text = try Double(floatParser.parse(values: values[index])).knots.value.formattedSpeedKnots
                     index += 1
                     
                     self.windSpeedLabel.text = try Double(floatParser.parse(values: values[index])).formattedSpeedKnots
