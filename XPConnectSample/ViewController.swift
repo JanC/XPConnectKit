@@ -12,12 +12,7 @@ import XPConnectKit
 import XPDiscoveryKit
 
 class ViewController: UIViewController {
-    
-//    static let host = "192.168.1.121"
-        static let host = "192.168.1.197"
-    //    static let host = "192.168.0.5"
-    
-    let client = XPCClient(host: ViewController.host)
+
     var connector: XPLConnector?
     
     lazy var discovery = XPDiscovery()
@@ -41,7 +36,7 @@ class ViewController: UIViewController {
     @IBOutlet var windSpeedLabel: UILabel!
     @IBOutlet var windDirectionLabel: UILabel!
     
-    var host: String?
+    var host: String = "192.168.0.11"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,21 +47,6 @@ class ViewController: UIViewController {
         } catch {
             showAlert(title: "Could not start discovery", message: error.localizedDescription)
         }
-
-//        let connector = XPLConnector(host: "192.168.1.1")
-//
-//        do {
-//            // com1 is an Int
-//            let com1 = try connector.get(dref: "sim/cockpit/radios/com1_freq_hz", parser: IntParser())
-//            print("com1: \(com1)")
-//
-//            // result is a String
-//            let tailnum = try connector.get(dref: "sim/aircraft/view/acf_tailnum", parser: StringParser())
-//            print("tailnum: \(tailnum)")
-//            
-//        } catch {
-//            print("error: \(error)")
-//        }
     }
     
     @IBAction func stopAction() {
@@ -75,8 +55,8 @@ class ViewController: UIViewController {
     }
     @IBAction func startAction() {
         
-        print("Connecting to \(host ?? ViewController.host)")
-        connector = XPLConnector(host: host ?? ViewController.host)
+        print("Connecting to \(host)")
+        connector = XPLConnector(host: host)
         
         startRequestingDataRefs()
 
@@ -104,7 +84,7 @@ class ViewController: UIViewController {
         
         let intParser = IntParser()
         let floatParser = FloatParser()
-        connector?.startRequesting(drefs: radioDrefs) { result in
+        connector?.startRequesting(drefs: radioDrefs, interval: 0.5) { result in
             switch result {
             case .success(let values):
                 do {
@@ -160,13 +140,6 @@ class ViewController: UIViewController {
     
     func handle(error: Error) {
         print("Error: \(error)")
-        if case XPError.network = error {
-            // stop polling here
-            self.connector?.stopRequestingDataRefs()
-            askYesNo(title: "Disconnected", question: "Reconnect?", yesAction: {
-                self.startAction()
-            })
-        }
     }
 }
 
@@ -175,8 +148,15 @@ extension ViewController: XPDiscoveryDelegate {
         host = node.address
         let message = "Discovered XPlane version \(node.beacon.xplaneVersion) - \(node.beacon.xplaneConnectVersion): \(node.address):\(node.port)"
         print(message)
+        host = node.address
 
-        showAlert(title: "Discovered X-Plane Connect", message: message)
-        //askYesNo(title: "Discovered X-Plane Connect ", question: <#T##String#>, yesAction: <#T##(() -> Void)##(() -> Void)##() -> Void#>)
+        askYesNo(title: message, question: "Connect now?", yesAction: {
+            self.startAction()
+        })
+    }
+
+    func discovery(_ dicovery: XPDiscovery, didLostNode node: XPLNode) {
+        print("Connection lost. No beacon received from \(node.address) after \(discovery.timeout)s")
+        showAlert(title: "Connection lost", message: "No beacon received from \(node.address) after \(discovery.timeout)s")
     }
 }

@@ -62,18 +62,6 @@ public class XPCClient {
         return result
     }
     
-//    public func get(drefs: [String], expctedSizes: [Int32]? = nil) throws -> [[Float]] {
-//        // todo call getDREFs instead!
-//        let expected = expctedSizes != nil ? expctedSizes! : Array(repeating: Int32(255), count: drefs.count)
-//
-//        var results = [[Float]]()
-//        for (index, dref) in drefs.enumerated() {
-//
-//            let result = try get(dref: dref, expectedSize: expected[index])
-//            results.append(result)
-//        }
-//        return results
-//    }
     
     public func get(drefs: [String], expectedSizes: [Int32]? = nil) throws -> [[Float]] {
 

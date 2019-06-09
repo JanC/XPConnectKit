@@ -85,7 +85,7 @@ public class XPLConnector: NSObject {
     public func startRequesting(drefs: [String], interval: TimeInterval = 1, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) {
         
         // only start for drefs that are not already requested
-        let filteredDrefs = drefs.filter({ drefTimers[$0] == nil })
+        let filteredDrefs = drefs.filter { drefTimers[$0] == nil }
         if filteredDrefs.count == 0 {
             return
         }
