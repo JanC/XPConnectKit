@@ -27,6 +27,12 @@ public class XPDiscovery: NSObject {
 
     // If a received beacon is not received again within this timeout, the 'didLostNode' is called
     public let timeout: TimeInterval
+
+    /// Callback when a node is discovered
+    public var onNodeDiscovered: ((XPLNode) -> Void)?
+
+    /// Callback when a node is lost
+    public var onNodeLost: ((XPLNode) -> Void)?
     
     // MARK: - Private properties
     
@@ -69,6 +75,7 @@ public class XPDiscovery: NSObject {
         discoveredBeacons[node.address] = nil
         callbackQueue.addOperation { [weak self] in
             guard let self = self else { return }
+            self.onNodeLost?(node)
             self.delegate?.discovery(self, didLostNode: node)
         }
     }
@@ -93,6 +100,7 @@ public class XPDiscovery: NSObject {
 
         callbackQueue.addOperation { [weak self] in
             guard let self = self else { return }
+            self.onNodeDiscovered?(node)
             self.delegate?.discovery(self, didDiscoverNode: node)
         }
     }
