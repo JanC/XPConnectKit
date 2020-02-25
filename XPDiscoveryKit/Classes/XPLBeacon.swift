@@ -9,7 +9,6 @@
 import Foundation
 
 public struct XPLBeacon {
-
     // XPlaneConnect server port e.g. '49009'
     public let port: ushort
 
@@ -22,6 +21,12 @@ public struct XPLBeacon {
     public var xplaneVersion: String {
 
         return String(format: "%.2f", Double(xplaneVersionCode) / 100.0)
+    }
+
+    public init(port: ushort, xplaneVersionCode: UInt32, xplaneConnectVersion: String) {
+        self.port = port
+        self.xplaneVersionCode = xplaneVersionCode
+        self.xplaneConnectVersion = xplaneConnectVersion
     }
 
 }
