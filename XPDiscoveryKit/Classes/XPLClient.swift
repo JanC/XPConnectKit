@@ -43,14 +43,18 @@ public class XPLClient: NSObject {
         try socket.joinMulticastGroup(Constants.multicastAddress)
         try socket.beginReceiving()
     }
-    
+
+    func stop() throws {
+        print("Client close")
+        guard let socket = socket else { return }
+        try? socket.leaveMulticastGroup(Constants.multicastAddress)
+        socket.close()
+    }
     // MARK: - Private
 
     deinit {
         print("Client deinit")
-        guard let socket = socket else { return }
-        try? socket.leaveMulticastGroup(Constants.multicastAddress)
-        socket.close()
+        try? stop()
     }
 }
 
