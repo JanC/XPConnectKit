@@ -16,7 +16,13 @@ public protocol XPDiscoveryDelegate: AnyObject {
     func discovery(_ dicovery: XPDiscovery, didLostNode node: XPLNode)
 
 }
-public class XPDiscovery: NSObject {
+
+public protocol XPDiscoveryType: AnyObject {
+    var onNodeDiscovered: ((XPLNode) -> Void)? { get set }
+    func start() throws
+    func stop() throws
+}
+public class XPDiscovery: NSObject, XPDiscoveryType {
     
     // MARK: - Public properties
     
@@ -53,6 +59,9 @@ public class XPDiscovery: NSObject {
     
     public func start() throws {
         try client.setup()
+    }
+    public func stop() throws {
+        try client.stop()
     }
     
     // MARK: - Private Methods
