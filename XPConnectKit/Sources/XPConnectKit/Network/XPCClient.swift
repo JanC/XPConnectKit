@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import xplaneconnect
+import XPConnectKitC
 
 public enum XPError: Error {
     case network

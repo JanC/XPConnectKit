@@ -1,5 +1,0 @@
-
-module xplaneconnect [system][extern_c] {
-    header "xplaneConnect.h"
-    export *
-}
