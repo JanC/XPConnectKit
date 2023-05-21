@@ -15,12 +15,10 @@ enum XPLClientError: Error {
 }
 
 protocol XPLClientDelegate: AnyObject {
-
     func client(_ client: XPLClient, didFindBeacon beacon: XPLBeacon, atAddress address: String)
 }
 
 public class XPLClient: NSObject {
-
     enum Constants {
         static let multicastPort: UInt16 = 49710
         static let multicastAddress: String = "239.255.1.1"
@@ -36,7 +34,6 @@ public class XPLClient: NSObject {
 
     // MARK: - Public
     func setup() throws {
-      
         let socket = GCDAsyncUdpSocket(delegate: self, delegateQueue: queue, socketQueue: queue)
         self.socket = socket
         try socket.bind(toPort: Constants.multicastPort)
@@ -61,9 +58,7 @@ public class XPLClient: NSObject {
 // MARK: - GCDAsyncUdpSocketDelegate
 
 extension XPLClient: GCDAsyncUdpSocketDelegate {
-
     public func udpSocket(_ sock: GCDAsyncUdpSocket, didConnectToAddress address: Data) {
-        
     }
 
     public func udpSocket(_ sock: GCDAsyncUdpSocket, didNotConnect error: Error?) { }

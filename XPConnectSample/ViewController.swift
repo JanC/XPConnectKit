@@ -12,7 +12,6 @@ import XPConnectKit
 import XPDiscoveryKit
 
 class ViewController: UIViewController {
-
     var connector: XPLConnector?
     
     lazy var discovery = XPDiscovery()
@@ -51,15 +50,12 @@ class ViewController: UIViewController {
     
     @IBAction func stopAction() {
         connector?.stopRequestingDataRefs()
-        
     }
     @IBAction func startAction() {
-        
         print("Connecting to \(host)")
         connector = XPLConnector(host: host)
         
         startRequestingDataRefs()
-
     }
     
     func startRequestingDataRefs() {
@@ -127,7 +123,6 @@ class ViewController: UIViewController {
                     let heading = try Double(floatParser.parse(values: values[index])).formattedHeading
                     self.hdgLabel.text = heading
                     index += 1
-                    
                 } catch {
                     print("Could not parse dref: \(error)")
                 }

@@ -10,7 +10,6 @@ import Foundation
 
 
 public class XPLConnector: NSObject {
-    
     public enum Result {
         case success([[Float]])
         case failure(Error)
@@ -53,14 +52,12 @@ public class XPLConnector: NSObject {
             } catch {
                 clientError = error
             }
-            
             }], waitUntilFinished: true)
         
         if let clientError = clientError {
             throw clientError
         }
         return result!
-    
     }
     
     public func get(drefs: [String]) throws -> [[Float]] {
@@ -83,7 +80,6 @@ public class XPLConnector: NSObject {
     // MARK: - Start requesting
     
     public func startRequesting(drefs: [String], interval: TimeInterval = 1, callbackQueue: OperationQueue = OperationQueue.main, resultCallback: @escaping (Result) -> Void) {
-        
         // only start for drefs that are not already requested
         let filteredDrefs = drefs.filter { drefTimers[$0] == nil }
         if filteredDrefs.count == 0 {
@@ -92,7 +88,6 @@ public class XPLConnector: NSObject {
         print("Starting to request \(filteredDrefs.count) drefs every \(interval)s")
 
         let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { timer in
-
             if self.backgroundQueue.operations.count > 1 {
                 print("Skipping drefs request because \(self.backgroundQueue.operations.count) are already in progress. You might want to lower the update interval")
                 return
@@ -122,7 +117,6 @@ public class XPLConnector: NSObject {
         Starts updating the give data ref and calls the callback regularly with the result value
     */
     public func startRequesting<P: Parser>(dref: String, parser: P, interval: TimeInterval = 1, completionHandler: @escaping (P.T) -> Void) -> Bool {
-        
         if drefTimers[dref] != nil {
             // already updating
             return false
@@ -177,7 +171,7 @@ public class XPLConnector: NSObject {
     
     // Starts requesting the GETP and calls the completion handler
     public func startRequestingPosition(completionHandler: @escaping (XPCPosition) -> Void) {
-        if (positionTimer != nil) {
+        if positionTimer != nil {
             return
         }
 
@@ -194,7 +188,7 @@ public class XPLConnector: NSObject {
         @return false if the position was not updating
     */
     public func stopRequestingPosition() -> Bool {
-        if(positionTimer == nil) {
+        if positionTimer == nil {
             return false
         }
         positionTimer!.invalidate()

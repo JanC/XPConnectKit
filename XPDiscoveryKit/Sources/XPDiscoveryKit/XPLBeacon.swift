@@ -19,7 +19,6 @@ public struct XPLBeacon {
     public let xplaneConnectVersion: String
 
     public var xplaneVersion: String {
-
         return String(format: "%.2f", Double(xplaneVersionCode) / 100.0)
     }
 
@@ -28,11 +27,9 @@ public struct XPLBeacon {
         self.xplaneVersionCode = xplaneVersionCode
         self.xplaneConnectVersion = xplaneConnectVersion
     }
-
 }
 
 extension XPLBeacon: Decodable {
-    
     init(data: Data) {
         var offset = 0
         port = data.object(at: offset)

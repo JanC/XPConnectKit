@@ -10,7 +10,6 @@ import CoreLocation
 import Foundation
 
 public struct XPCPosition {
-    
     enum Indexes: Int {
         case lat = 0
         case long = 1
@@ -31,7 +30,7 @@ public struct XPCPosition {
     public let elevation: Double
     
     init?(aircraftId: Int, values: [Float]) {
-        if(values.count != Indexes.count) {
+        if values.count != Indexes.count {
             return nil
         }
         self.aircraftId = aircraftId
@@ -42,6 +41,5 @@ public struct XPCPosition {
         pitch = values[Indexes.pitch.rawValue]
         heading = Double(values[Indexes.heading.rawValue])
         elevation = Double(values[Indexes.elevation.rawValue])
-    
     }
 }

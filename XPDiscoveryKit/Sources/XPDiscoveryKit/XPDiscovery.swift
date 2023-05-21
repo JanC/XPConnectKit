@@ -9,12 +9,10 @@
 import UIKit
 
 public protocol XPDiscoveryDelegate: AnyObject {
-
     /// Called when a new XPlaneConnect instasnce is found
     func discovery(_ discovery: XPDiscovery, didDiscoverNode node: XPLNode)
 
     func discovery(_ dicovery: XPDiscovery, didLostNode node: XPLNode)
-
 }
 
 public protocol XPDiscoveryType: AnyObject {
@@ -23,7 +21,6 @@ public protocol XPDiscoveryType: AnyObject {
     func stop() throws
 }
 public class XPDiscovery: NSObject, XPDiscoveryType {
-    
     // MARK: - Public properties
     
     public weak var delegate: XPDiscoveryDelegate?
@@ -91,7 +88,7 @@ public class XPDiscovery: NSObject, XPDiscoveryType {
 
     private func setupTimer(for node: XPLNode) {
         DispatchQueue.main.async {
-            //print("Setting up timeout for node \(node.address)")
+            // print("Setting up timeout for node \(node.address)")
             let timer = Timer.scheduledTimer(withTimeInterval: self.timeout, repeats: false) { [weak self] _ in
                 self?.handleTimeout(for: node)
             }
@@ -116,7 +113,6 @@ public class XPDiscovery: NSObject, XPDiscoveryType {
 }
 
 extension XPDiscovery: XPLClientDelegate {
-    
     func client(_ client: XPLClient, didFindBeacon beacon: XPLBeacon, atAddress address: String) {
         handleBeacon(beacon: beacon, receivedFrom: address)
     }

@@ -10,7 +10,6 @@ import Foundation
 
 // Represent a running X-Plane instance
 public struct XPLNode {
-    
     public let address: String
     public var port: ushort {
         get {

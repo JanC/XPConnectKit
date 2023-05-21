@@ -6,13 +6,13 @@ import PackageDescription
 let package = Package(
     name: "XPDiscoveryKit",
     platforms: [
-        .iOS(.v13),
+        .iOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "XPDiscoveryKit",
-            targets: ["XPDiscoveryKit"]),
+            targets: ["XPDiscoveryKit"])
     ],
     dependencies: [
         .package(url: "https://github.com/robbiehanson/CocoaAsyncSocket.git", from: "7.6.5")

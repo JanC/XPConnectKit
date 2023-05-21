@@ -9,18 +9,15 @@
 import Foundation
 
 protocol Decodable {
-    
     init(data: Data)
 }
 
 protocol Codable {
-    
     // returns the UDP packet data
     func data() -> Data
 }
 
 struct XPLDecoder {
-    
     static let commandLength = 5
     
     static func command(response: Data) -> XPLCommandType {

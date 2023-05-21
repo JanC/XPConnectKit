@@ -16,27 +16,22 @@ public enum XPError: Error {
 
 
 public class XPCClient {
-    
     let socket: XPCSocket
     
     public init(host: String) {
-        
         let xpHost = host.cString(using: .utf8)!
         socket = openUDP(xpHost)
-        
     }
     
     public func getPosition(aircraftId: Int = 0) throws -> XPCPosition {
-
         let size: Int32 = 7
         let values = UnsafeMutablePointer<Float>.allocate(capacity: Int(size))
-        if(getPOSI(socket, values, Int8(aircraftId)) < 0 ) {
+        if getPOSI(socket, values, Int8(aircraftId)) < 0 {
             throw XPError.network
         }
         let result = Array(UnsafeBufferPointer(start: values, count: Int(size)))
         
         return XPCPosition(aircraftId: aircraftId, values: result)!
-        
     }
     
     public func get(dref: String, expectedSize: Int32 = 255) throws -> [Float] {
@@ -48,7 +43,7 @@ public class XPCClient {
         // allocate an float array with that size
         let values = UnsafeMutablePointer<Float>.allocate(capacity: Int(size))
     
-        if(getDREF(socket, dref.cString(using: .utf8)!, values, pSize) < 0) {
+        if getDREF(socket, dref.cString(using: .utf8)!, values, pSize) < 0 {
             throw XPError.network
         }
     
@@ -64,7 +59,6 @@ public class XPCClient {
     
     
     public func get(drefs: [String], expectedSizes: [Int32]? = nil) throws -> [[Float]] {
-
         let expected = expectedSizes != nil ? expectedSizes! : Array(repeating: Int32(255), count: drefs.count)
         
         var valuesArray = [UnsafeMutablePointer<Float>?]()
@@ -86,7 +80,7 @@ public class XPCClient {
         
         var cargs = drefs.map { UnsafePointer<Int8>(strdup($0)) }
     
-        if(getDREFs(socket, &cargs, &valuesArray, UInt8(drefs.count), sizesArray) < 0) {
+        if getDREFs(socket, &cargs, &valuesArray, UInt8(drefs.count), sizesArray) < 0 {
             throw XPError.network
         }
         

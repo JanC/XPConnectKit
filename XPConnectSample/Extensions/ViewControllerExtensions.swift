@@ -10,7 +10,6 @@ import UIKit
 
 
 extension UIViewController {
-    
     func showAlert(title: String, message: String) {
         OperationQueue.main.addOperation {
             let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)

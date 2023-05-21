@@ -12,7 +12,6 @@ import Foundation
 
 
 public extension CLLocationSpeed {
-    
     /// Knots from meters per second
     public var knots: Measurement<UnitSpeed> {
         get {
@@ -32,7 +31,6 @@ public extension CLLocationSpeed {
 }
 
 public extension CLLocationDistance {
-    
     /// feet from meters
     public var feet: Measurement<UnitLength> {
         get {
@@ -43,7 +41,7 @@ public extension CLLocationDistance {
     }
 }
 
-//public extension UnitLength {
+// public extension UnitLength {
 //
 //    static let formatter: MeasurementFormatter = {
 //        let f = MeasurementFormatter()
@@ -58,10 +56,9 @@ public extension CLLocationDistance {
 //            return UnitLength.formatter.string(from: self)
 //        }
 //    }
-//}
+// }
 
 public extension Int {
-    
     static var formatter = NumberFormatter()
     
     /// Formats a radio frequency: 12700 -> "127.00"
@@ -76,7 +73,6 @@ public extension Int {
 
 
 public extension Double {
-    
     static let formatter: NumberFormatter = {
         let f = NumberFormatter()
         f.maximumFractionDigits = 0

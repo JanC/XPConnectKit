@@ -10,7 +10,6 @@ import Foundation
 
 
 public protocol Parser {
-    
     associatedtype T
     
     var expectedSize: Int { get }
@@ -19,7 +18,6 @@ public protocol Parser {
 }
 
 public struct FloatArrayParser: Parser {
-    
     public typealias T = [Float]
     
     public let expectedSize: Int
@@ -34,7 +32,6 @@ public struct FloatArrayParser: Parser {
 }
 
 public struct FloatParser: Parser {
-    
     public typealias T = Float
     
     public let expectedSize: Int
@@ -49,7 +46,6 @@ public struct FloatParser: Parser {
 }
 
 public struct IntParser: Parser {
-    
     public typealias T = Int
     
     public let expectedSize: Int
@@ -78,13 +74,11 @@ public struct StringParser: Parser {
     
     public func parse(values: [Float]) throws -> String {
         let chars = try values.map { float -> CChar in
-            
             let int = Int(float)
-            if (int > Int8.max || int < Int8.min) {
+            if int > Int8.max || int < Int8.min {
                 throw XPError.parsing("\(Int(float)) is not a valid character value")
             }
             return CChar(float)
-            
         }
         let string: String = chars.withUnsafeBufferPointer { ptr in
             let s = String(cString: ptr.baseAddress!)
