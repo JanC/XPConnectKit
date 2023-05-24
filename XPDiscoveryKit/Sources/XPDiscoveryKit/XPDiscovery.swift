@@ -80,7 +80,7 @@ public class XPDiscovery: NSObject, XPDiscoveryType {
     private func handleTimeout(for node: XPLNode) {
         discoveredBeacons[node.address] = nil
         callbackQueue.addOperation { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.onNodeLost?(node)
             self.delegate?.discovery(self, didLostNode: node)
         }
@@ -105,7 +105,7 @@ public class XPDiscovery: NSObject, XPDiscoveryType {
         setupTimer(for: node)
 
         callbackQueue.addOperation { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.onNodeDiscovered?(node)
             self.delegate?.discovery(self, didDiscoverNode: node)
         }

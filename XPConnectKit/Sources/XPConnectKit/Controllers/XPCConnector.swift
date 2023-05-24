@@ -54,7 +54,7 @@ public class XPLConnector: NSObject {
             }
             }], waitUntilFinished: true)
         
-        if let clientError = clientError {
+        if let clientError {
             throw clientError
         }
         return result!
@@ -71,7 +71,7 @@ public class XPLConnector: NSObject {
             }
         }], waitUntilFinished: true)
         
-        if let clientError = clientError {
+        if let clientError {
             throw clientError
         }
         return result
